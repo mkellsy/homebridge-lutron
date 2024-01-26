@@ -23,7 +23,7 @@
         "pair": "npm run build && ./bin/leap -d pair"
     },
     "dependencies": {
-        "@mkellsy/leap-client": "^0.1.3",
+        "@mkellsy/leap-client": "^0.1.4",
         "colors": "^1.4.0",
         "commander": "^10.0.1",
         "js-logger": "^1.6.1"
