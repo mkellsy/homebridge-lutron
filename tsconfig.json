@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "declaration": true,
+        "declarationDir": "lib",
+        "outDir": "lib",
+        "module": "CommonJS",
+        "target": "ES6",
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noImplicitReturns": true,
+        "strictFunctionTypes": true,
+        "strictNullChecks": true,
+        "strictPropertyInitialization": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "allowJs": true
+    },
+    "include": [
+        "**/*.ts"
+    ],
+    "exclude": [
+        "coverage",
+        "test",
+        "lib",
+        "node_modules"
+    ]
+}

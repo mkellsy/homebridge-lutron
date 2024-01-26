@@ -1,0 +1,36 @@
+{
+    "version": "0.0.1",
+    "name": "@mkellsy/lutron-cli",
+    "displayName": "Lutron LEAP CLI Tool",
+    "description": "Creates a command line tool for Lutron LEAP debugging",
+    "author": "Michael Kellsy",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/mkellsy/lutron-cli"
+    },
+    "homepage": "https://github.com/mkellsy/lutron-cli",
+    "main": "lib/index.js",
+    "files": [
+        "/lib"
+    ],
+    "bin": {
+        "leap": "bin/leap"
+    },
+    "scripts": {
+        "build": "rm -fR ./lib && tsc --project tsconfig.json",
+        "start": "npm run build && ./bin/leap -d start",
+        "pair": "npm run build && ./bin/leap -d pair"
+    },
+    "dependencies": {
+        "@mkellsy/leap-client": "^0.1.3",
+        "colors": "^1.4.0",
+        "commander": "^10.0.1",
+        "js-logger": "^1.6.1"
+    },
+    "devDependencies": {
+        "@types/debug": "^4.1.12",
+        "@types/node": "^20.11.0",
+        "typescript": "^5.3.3"
+    }
+}
