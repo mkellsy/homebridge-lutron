@@ -1,15 +1,15 @@
 {
     "version": "0.0.1",
-    "name": "@mkellsy/lutron-cli",
-    "displayName": "Lutron LEAP CLI Tool",
-    "description": "Creates a command line tool for Lutron LEAP debugging",
+    "name": "@mkellsy/hap-debug-cli",
+    "displayName": "HAP Debug CLI",
+    "description": "Creates a command line tool for HAP debugging",
     "author": "Michael Kellsy",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/mkellsy/lutron-cli"
+        "url": "https://github.com/mkellsy/hap-debug-cli"
     },
-    "homepage": "https://github.com/mkellsy/lutron-cli",
+    "homepage": "https://github.com/mkellsy/hap-debug-cli",
     "main": "lib/index.js",
     "files": [
         "/lib"
@@ -23,7 +23,7 @@
         "pair": "npm run build && ./bin/leap -d pair"
     },
     "dependencies": {
-        "@mkellsy/leap-client": "^0.1.4",
+        "@mkellsy/leap-client": "^0.1.8",
         "colors": "^1.4.0",
         "commander": "^10.0.1",
         "js-logger": "^1.6.1"

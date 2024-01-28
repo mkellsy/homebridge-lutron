@@ -1,7 +1,9 @@
 import * as Console from "js-logger";
 
 import Colors from "colors";
+
 import { Command } from "commander";
+import { inspect } from "util";
 
 export type Log = Console.ILogger;
 
@@ -28,5 +30,15 @@ export abstract class Logger {
 
     static get(name: string): Console.ILogger {
         return Console.get(name);
+    }
+
+    static inspect(value: any): string {
+        return Colors.dim(inspect(value, {
+            showHidden: false,
+            depth: Infinity,
+            colors: true,
+            compact: true,
+            breakLength: Infinity,
+        }));
     }
 }

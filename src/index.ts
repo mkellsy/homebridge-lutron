@@ -9,23 +9,57 @@ const log = Logger.log;
 
 program.option("-d, --debug", "enable debug logging");
 
-program.command("start").action(() => {
-    Logger.configure(program);
+program
+    .command("start")
+    .option("-r, --refresh", "refresh processor cache")
+    .action((options) => {
+        Logger.configure(program);
 
-    const location = Leap.connect();
+        const location = Leap.connect(options.refresh);
 
-    location.on("Identify", (device): void => {
-        device.log.debug(device.name, Colors.green(device.type));
+        location.on("Available", (processor): void => {
+            const devices = [...processor.devices.values()];
+
+            log.debug("Processor", Logger.inspect({
+                id: processor.id,
+                devices: [...processor.devices.values()].length,
+            }));
+
+            devices.sort((a, b) => {
+                if (a.name < b.name) {
+                    return -1;
+                }
+
+                if (a.name > b.name) {
+                    return 1;
+                }
+
+                return 0;
+            });
+
+            for (const device of devices) {
+                const details: { [key: string]: any } = {
+                    name: device.name,
+                    room: device.room,
+                    type: device.type,
+                };
+
+                if (Object.keys(device.capabilities).length > 0) {
+                    details.capabilities = device.capabilities;
+                }
+
+                log.debug(device.name, Logger.inspect(details));
+            }
+        });
+
+        location.on("Update", (device, state): void => {
+            log.debug(device.name, Logger.inspect(state));
+        });
+
+        location.on("Action", (device, button, action): void => {
+            log.debug(device.name, Logger.inspect({ name: button.name, action }));
+        });
     });
-
-    location.on("Update", (device, state): void => {
-        device.log.debug(device.name, Colors.dim(JSON.stringify(state)));
-    });
-
-    location.on("Action", (device, button, action): void => {
-        device.log.debug(device.name, Colors.dim(JSON.stringify(button)), Colors.green(action));
-    });
-});
 
 program.command("pair").action(() => {
     Logger.configure(program);
