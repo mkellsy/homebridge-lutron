@@ -1,21 +1,16 @@
 import * as Homebridge from "homebridge";
 import * as Leap from "@mkellsy/leap-client";
 import * as Interfaces from "@mkellsy/hap-device";
-import * as DeviceType from "./DeviceType";
 
-import { parseAction } from "./Actions";
-import { services } from "./Services";
+import { Device } from "./Device";
+import { DeviceFactory } from "./DeviceFactory";
 
 export class Platform implements Homebridge.DynamicPlatformPlugin {
-    private readonly log: Homebridge.Logging;
-    private readonly config: Homebridge.PlatformConfig;
     private readonly homebridge: Homebridge.API;
-
     private readonly accessories: Map<string, Homebridge.PlatformAccessory> = new Map();
+    private readonly devices: Map<string, Device> = new Map();
 
-    constructor(log: Homebridge.Logging, config: Homebridge.PlatformConfig, homebridge: Homebridge.API) {
-        this.log = log;
-        this.config = config;
+    constructor(_log: Homebridge.Logging, _config: Homebridge.PlatformConfig, homebridge: Homebridge.API) {
         this.homebridge = homebridge;
 
         Leap.connect().on("Available", this.onAvailable).on("Action", this.onAction).on("Update", this.onUpdate);
@@ -28,25 +23,19 @@ export class Platform implements Homebridge.DynamicPlatformPlugin {
     private onAvailable = (devices: Interfaces.Device[]): void => {
         for (const device of devices) {
             const id = this.homebridge.hap.uuid.generate(device.id);
-            const cached = this.accessories.get(id) != null;
+            const accessory = DeviceFactory.create(id, device, this.homebridge, this.accessories.get(id)).accessory;
 
-            const accessory =
-                this.accessories.get(id) || new this.homebridge.platformAccessory(`${device.room} ${device.name}`, id);
-
-            DeviceType.create(this.homebridge, id, device, accessory, cached);
+            if (this.accessories.get(id) == null) {
+                this.accessories.set(id, accessory);
+            }
         }
     };
 
-    private onAction = (_device: Interfaces.Device, button: Interfaces.Button, action: Interfaces.Action): void => {
-        const service = services.get(button.id);
-        const event = parseAction(action);
-
-        if (service != null && event >= 0) {
-            service
-                .getCharacteristic(this.homebridge.hap.Characteristic.ProgrammableSwitchEvent)
-                .updateValue(event);
-        }
+    private onAction = (device: Interfaces.Device, button: Interfaces.Button, action: Interfaces.Action): void => {
+        this.devices.get(device.id)?.onAction(button, action);
     };
 
-    private onUpdate = (device: Interfaces.Device, state: Interfaces.DeviceState): void => {};
+    private onUpdate = (device: Interfaces.Device, state: Interfaces.DeviceState): void => {
+        this.devices.get(device.id)?.onUpdate(state);
+    };
 }

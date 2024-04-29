@@ -1,18 +1,19 @@
 import * as Homebridge from "homebridge";
 import * as Interfaces from "@mkellsy/hap-device";
 
-import { Accessory } from "./Accessory";
-import { services } from "./Services";
+import { Common } from "./Common";
+import { Device } from "./Device";
 
-export class Keypad extends Accessory {
+export class Keypad extends Common implements Device {
+    private services: Map<string, Homebridge.Service> = new Map();
+
     constructor(
         id: string,
         device: Interfaces.Keypad,
-        accessory: Homebridge.PlatformAccessory,
         homebridge: Homebridge.API,
-        cached: boolean
+        accessory?: Homebridge.PlatformAccessory
     ) {
-        super(id, device, accessory, homebridge, cached);
+        super(id, device, homebridge, accessory);
 
         const labelService =
             this.accessory.getService(this.homebridge.hap.Service.ServiceLabel) ||
@@ -41,7 +42,30 @@ export class Keypad extends Accessory {
                 .getCharacteristic(this.homebridge.hap.Characteristic.ProgrammableSwitchEvent)
                 .setProps({ maxValue: 2 });
 
-            services.set(button.id, service);
+            this.services.set(button.id, service);
+        }
+    }
+
+    public onUpdate(_state: Interfaces.DeviceState): void { /* no-op */ }
+
+    public onAction(button: Interfaces.Button, action: Interfaces.Action): void {
+        const service = this.services.get(button.id);
+        const characteristic = service?.getCharacteristic(this.homebridge.hap.Characteristic.ProgrammableSwitchEvent);
+
+        if (service != null && characteristic != null) {
+            switch (action) {
+                case "Press":
+                    characteristic.updateValue(this.homebridge.hap.Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS);
+                    break;
+
+                case "DoublePress":
+                    characteristic.updateValue(this.homebridge.hap.Characteristic.ProgrammableSwitchEvent.DOUBLE_PRESS);
+                    break;
+
+                case "LongPress":
+                    characteristic.updateValue(this.homebridge.hap.Characteristic.ProgrammableSwitchEvent.LONG_PRESS);
+                    break;
+            }
         }
     }
 }

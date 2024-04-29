@@ -1,4 +1,5 @@
 import * as Leap from "@mkellsy/leap-client";
+import * as Interface from "@mkellsy/hap-device";
 
 import Colors from "colors";
 
@@ -15,47 +16,7 @@ program
     .action((options) => {
         Logger.configure(program);
 
-        const location = Leap.connect(options.refresh);
-
-        location.on("Available", (devices): void => {
-            devices.sort((a, b) => {
-                if (a.name < b.name) {
-                    return -1;
-                }
-
-                if (a.name > b.name) {
-                    return 1;
-                }
-
-                return 0;
-            });
-
-            for (const device of devices) {
-                const details: { [key: string]: any } = {
-                    name: device.name,
-                    room: device.room,
-                    type: device.type,
-                };
-
-                if ((device as any).buttons != null) {
-                    details.buttons = (device as any).buttons.map((button: any) => ({ index: button.index, name: button.name }));
-                }
-
-                if (Object.keys(device.capabilities).length > 0) {
-                    details.capabilities = device.capabilities;
-                }
-
-                log.debug(device.name, Logger.inspect(details));
-            }
-        });
-
-        location.on("Update", (device, state): void => {
-            log.debug(device.name, Logger.inspect(state));
-        });
-
-        location.on("Action", (device, button, action): void => {
-            log.debug(device.name, Logger.inspect({ name: button.name, action }));
-        });
+        Leap.connect(options.refresh).on("Available", onAvailable).on("Update", onUpdate).on("Action", onAction);
     });
 
 program.command("pair").action(() => {
@@ -68,6 +29,49 @@ program.command("pair").action(() => {
         .catch((error) => log.error(Colors.red(error.message)))
         .finally(() => process.exit(0));
 });
+
+const onAvailable = (devices: Interface.Device[]): void => {
+    devices.sort((a, b) => {
+        if (a.name < b.name) {
+            return -1;
+        }
+
+        if (a.name > b.name) {
+            return 1;
+        }
+
+        return 0;
+    });
+
+    for (const device of devices) {
+        const details: { [key: string]: any } = {
+            name: device.name,
+            room: device.room,
+            type: device.type,
+        };
+
+        if ((device as any).buttons != null) {
+            details.buttons = (device as any).buttons.map((button: any) => ({
+                index: button.index,
+                name: button.name,
+            }));
+        }
+
+        if (Object.keys(device.capabilities).length > 0) {
+            details.capabilities = device.capabilities;
+        }
+
+        log.debug(device.name, Logger.inspect(details));
+    }
+};
+
+const onUpdate = (device: Interface.Device, state: Interface.DeviceState): void => {
+    log.debug(device.name, Logger.inspect(state));
+};
+
+const onAction = (device: Interface.Device, button: Interface.Button, action: Interface.Action): void => {
+    log.debug(device.name, Logger.inspect({ name: button.name, action }));
+};
 
 export = function main(args?: string[] | undefined): void {
     program.parse(args || process.argv);

@@ -1,16 +1,20 @@
 import * as Homebridge from "homebridge";
 import * as Interfaces from "@mkellsy/hap-device";
 
-import { Accessory } from "./Accessory";
+import { Common } from "./Common";
+import { Device } from "./Device";
 
-export class Switch extends Accessory {
+export class Switch extends Common implements Device {
     constructor(
         id: string,
         device: Interfaces.Switch,
-        accessory: Homebridge.PlatformAccessory,
         homebridge: Homebridge.API,
-        cached: boolean
+        accessory?: Homebridge.PlatformAccessory
     ) {
-        super(id, device, accessory, homebridge, cached);
+        super(id, device, homebridge, accessory);
     }
+
+    public onUpdate(_state: Interfaces.DeviceState): void { /* no-op */ }
+
+    public onAction(_button: Interfaces.Button, _action: Interfaces.Action): void { /* no-op */ }
 }

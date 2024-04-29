@@ -1,5 +1,5 @@
 {
-    "version": "0.0.1",
+    "version": "0.0.2",
     "name": "@mkellsy/homebridge-participle",
     "displayName": "Homebridge Participle Plugin",
     "description": "This participle plugin is a plugin that exposes evented clients to Homebridge that all use the same interfaces and events",
