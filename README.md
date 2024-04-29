@@ -1,11 +1,11 @@
-# Lutron LEAP Debug CLI
-Creates a command line tool for Lutron LEAP debugging.
+# Homebridge Participle
+This participle plugin is a plugin that exposes evented clients to Homebridge that all use the same interfaces and events.
 
 ## CLI
 Pairing a processor or bridge
 
 ```
-leap pair
+participle pair
 ```
 
 This will autopmatically discover processors. You will need to press the pairing button on your processor or bridge.
@@ -17,5 +17,5 @@ If you have multiple systems Caseta and RA3, you can pair other processors or br
 After you have a processor or bridge paired, you can start the publisher.
 
 ```
-leap start
+participle start
 ```

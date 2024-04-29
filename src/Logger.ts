@@ -33,12 +33,14 @@ export abstract class Logger {
     }
 
     static inspect(value: any): string {
-        return Colors.dim(inspect(value, {
-            showHidden: false,
-            depth: Infinity,
-            colors: true,
-            compact: true,
-            breakLength: Infinity,
-        }));
+        return Colors.dim(
+            inspect(value, {
+                showHidden: false,
+                depth: Infinity,
+                colors: true,
+                compact: true,
+                breakLength: Infinity,
+            })
+        );
     }
 }

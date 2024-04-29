@@ -1,32 +1,36 @@
 {
     "version": "0.0.1",
-    "name": "@mkellsy/hap-debug-cli",
-    "displayName": "HAP Debug CLI",
-    "description": "Creates a command line tool for HAP debugging",
+    "name": "@mkellsy/homebridge-participle",
+    "displayName": "Homebridge Participle Plugin",
+    "description": "This participle plugin is a plugin that exposes evented clients to Homebridge that all use the same interfaces and events",
     "author": "Michael Kellsy",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/mkellsy/hap-debug-cli"
+        "url": "https://github.com/mkellsy/homebridge-participle"
     },
-    "homepage": "https://github.com/mkellsy/hap-debug-cli",
+    "homepage": "https://github.com/mkellsy/homebridge-participle",
     "main": "lib/index.js",
     "files": [
         "/lib"
     ],
     "bin": {
-        "leap": "bin/leap"
+        "participle": "bin/participle"
     },
     "scripts": {
         "build": "rm -fR ./lib && tsc --project tsconfig.json",
-        "start": "npm run build && ./bin/leap -d start",
-        "pair": "npm run build && ./bin/leap -d pair"
+        "start": "npm run build && ./bin/participle -d start",
+        "pair": "npm run build && ./bin/participle -d pair"
     },
     "dependencies": {
-        "@mkellsy/leap-client": "^0.1.8",
+        "@mkellsy/hap-device": "^1.0.3",
+        "@mkellsy/leap-client": "^1.0.6",
         "colors": "^1.4.0",
         "commander": "^10.0.1",
         "js-logger": "^1.6.1"
+    },
+    "peerDependencies": {
+        "homebridge": "^1.8.1"
     },
     "devDependencies": {
         "@types/debug": "^4.1.12",
