@@ -1,8 +1,6 @@
 import * as Homebridge from "homebridge";
 
-import { Platform } from "./Platform";
-
-import { platform, plugin } from "./Accessories";
+import { Platform, platform, plugin } from "./Platform";
 
 export = (homebridge: Homebridge.API) => {
     homebridge.registerPlatform(plugin, platform, Platform);

@@ -1,7 +1,7 @@
 import * as Homebridge from "homebridge";
 import * as Interfaces from "@mkellsy/hap-device";
 
-import { accessories, devices, platform, plugin } from "./Accessories";
+import { accessories, devices, platform, plugin } from "./Platform";
 
 export abstract class Common {
     public readonly id: string;

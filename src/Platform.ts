@@ -2,10 +2,18 @@ import * as Homebridge from "homebridge";
 import * as Leap from "@mkellsy/leap-client";
 import * as Interfaces from "@mkellsy/hap-device";
 
-import { DeviceFactory } from "./DeviceFactory";
+import { Accessories } from "./Accessories";
+import { Device } from "./Device";
 
-import { accessories } from "./Accessories";
 import { defaults } from "./Config";
+
+const accessories: Map<string, Homebridge.PlatformAccessory> = new Map();
+const devices: Map<string, Device> = new Map();
+
+const platform: string = "LutronRA3";
+const plugin: string = "@mkellsy/homebridge-lutron-ra3";
+
+export { accessories, devices, platform, plugin };
 
 export class Platform implements Homebridge.DynamicPlatformPlugin {
     private readonly log: Homebridge.Logging;
@@ -32,18 +40,18 @@ export class Platform implements Homebridge.DynamicPlatformPlugin {
 
     private onAvailable = (devices: Interfaces.Device[]): void => {
         for (const device of devices) {
-            const accessory = DeviceFactory.create(this.homebridge, device, this.config, this.log);
+            const accessory = Accessories.create(this.homebridge, device, this.config, this.log);
 
             accessory?.register();
 
             if (accessory == null) {
-                DeviceFactory.remove(this.homebridge, device);
+                Accessories.remove(this.homebridge, device);
             }
         }
     };
 
     private onAction = (device: Interfaces.Device, button: Interfaces.Button, action: Interfaces.Action): void => {
-        const accessory = DeviceFactory.get(this.homebridge, device);
+        const accessory = Accessories.get(this.homebridge, device);
 
         if (accessory == null || accessory.onAction == null) {
             return;
@@ -53,7 +61,7 @@ export class Platform implements Homebridge.DynamicPlatformPlugin {
     };
 
     private onUpdate = (device: Interfaces.Device, state: Interfaces.DeviceState): void => {
-        const accessory = DeviceFactory.get(this.homebridge, device);
+        const accessory = Accessories.get(this.homebridge, device);
 
         if (accessory == null || accessory.onUpdate == null) {
             return;

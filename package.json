@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "name": "@mkellsy/homebridge-lutron-ra3",
     "displayName": "Homebridge Lutron Radio RA3",
     "description": "This is a plugin that exposes Lutron Radio RA3 devices to Homebridge.",
@@ -30,7 +30,7 @@
     },
     "dependencies": {
         "@mkellsy/hap-device": "^1.0.3",
-        "@mkellsy/leap-client": "^1.0.6",
+        "@mkellsy/leap-client": "^1.0.7",
         "colors": "^1.4.0",
         "commander": "^10.0.1",
         "js-logger": "^1.6.1"

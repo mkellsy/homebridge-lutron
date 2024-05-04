@@ -10,13 +10,24 @@ export class Keypad extends Common implements Device {
     constructor(homebridge: Homebridge.API, device: Interfaces.Keypad, log: Homebridge.Logging) {
         super(homebridge, device, log);
 
+        const labelService =
+            this.accessory.getService(this.homebridge.hap.Service.ServiceLabel) ||
+            this.accessory.addService(this.homebridge.hap.Service.ServiceLabel);
+
+        labelService.setCharacteristic(
+            this.homebridge.hap.Characteristic.ServiceLabelNamespace,
+            this.homebridge.hap.Characteristic.ServiceLabelNamespace.ARABIC_NUMERALS,
+        );
+
         for (const button of device.buttons) {
             const service =
                 this.accessory.getService(this.homebridge.hap.Service.StatelessProgrammableSwitch) ||
                 this.accessory.addService(this.homebridge.hap.Service.StatelessProgrammableSwitch, button.name);
 
+            service.addLinkedService(labelService);
+
             service.setCharacteristic(this.homebridge.hap.Characteristic.Name, button.name);
-            service.setCharacteristic(this.homebridge.hap.Characteristic.ServiceLabelIndex, button.index + 1);
+            service.setCharacteristic(this.homebridge.hap.Characteristic.ServiceLabelIndex, button.index);
 
             service
                 .getCharacteristic(this.homebridge.hap.Characteristic.ProgrammableSwitchEvent)
