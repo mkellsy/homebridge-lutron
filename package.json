@@ -15,7 +15,8 @@
         "homebridge-plugin"
     ],
     "files": [
-        "/lib"
+        "/lib",
+        "/bin"
     ],
     "bin": {
         "lutron": "bin/lutron"
