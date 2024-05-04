@@ -21,8 +21,8 @@ export class Keypad extends Common implements Device {
 
         for (const button of device.buttons) {
             const service =
-                this.accessory.getService(this.homebridge.hap.Service.StatelessProgrammableSwitch) ||
-                this.accessory.addService(this.homebridge.hap.Service.StatelessProgrammableSwitch, button.name);
+                this.accessory.getServiceById(this.homebridge.hap.Service.StatelessProgrammableSwitch, button.name) ||
+                this.accessory.addService(this.homebridge.hap.Service.StatelessProgrammableSwitch, button.name, button.name);
 
             service.addLinkedService(labelService);
 
