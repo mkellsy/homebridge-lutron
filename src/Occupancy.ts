@@ -5,16 +5,33 @@ import { Common } from "./Common";
 import { Device } from "./Device";
 
 export class Occupancy extends Common implements Device {
-    constructor(
-        id: string,
-        device: Interfaces.Occupancy,
-        homebridge: Homebridge.API,
-        accessory?: Homebridge.PlatformAccessory
-    ) {
-        super(id, device, homebridge, accessory);
+    private service: Homebridge.Service;
+
+    constructor(homebridge: Homebridge.API, device: Interfaces.Occupancy, log: Homebridge.Logging) {
+        super(homebridge, device, log);
+
+        this.service =
+            this.accessory.getService(this.homebridge.hap.Service.OccupancySensor) ||
+            this.accessory.addService(this.homebridge.hap.Service.OccupancySensor, this.device.name);
+
+        this.service.setCharacteristic(this.homebridge.hap.Characteristic.Name, this.device.name);
+        this.service.getCharacteristic(this.homebridge.hap.Characteristic.OccupancyDetected).onGet(this.onGetState);
     }
 
-    public onUpdate(_state: Interfaces.DeviceState): void { /* no-op */ }
+    public onUpdate(state: Interfaces.DeviceState): void {
+        this.log.debug(
+            `Occupancy: ${this.device.name} State: ${state.state === "Occupied" ? "Detected" : "Not Detected"}`
+        );
 
-    public onAction(_button: Interfaces.Button, _action: Interfaces.Action): void { /* no-op */ }
+        this.service.updateCharacteristic(
+            this.homebridge.hap.Characteristic.OccupancyDetected,
+            state.state === "Occupied"
+        );
+    }
+
+    private onGetState = (): Homebridge.CharacteristicValue => {
+        this.log.debug(`Occupancy Get State: ${this.device.name} ${this.device.status.state}`);
+
+        return this.device.status.state === "Occupied";
+    };
 }

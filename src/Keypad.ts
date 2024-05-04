@@ -7,36 +7,16 @@ import { Device } from "./Device";
 export class Keypad extends Common implements Device {
     private services: Map<string, Homebridge.Service> = new Map();
 
-    constructor(
-        id: string,
-        device: Interfaces.Keypad,
-        homebridge: Homebridge.API,
-        accessory?: Homebridge.PlatformAccessory
-    ) {
-        super(id, device, homebridge, accessory);
-
-        const labelService =
-            this.accessory.getService(this.homebridge.hap.Service.ServiceLabel) ||
-            this.accessory.addService(this.homebridge.hap.Service.ServiceLabel);
-
-        labelService.setCharacteristic(
-            this.homebridge.hap.Characteristic.ServiceLabelNamespace,
-            this.homebridge.hap.Characteristic.ServiceLabelNamespace.ARABIC_NUMERALS
-        );
+    constructor(homebridge: Homebridge.API, device: Interfaces.Keypad, log: Homebridge.Logging) {
+        super(homebridge, device, log);
 
         for (const button of device.buttons) {
             const service =
-                this.accessory.getServiceById(this.homebridge.hap.Service.StatelessProgrammableSwitch, button.name) ||
-                this.accessory.addService(
-                    this.homebridge.hap.Service.StatelessProgrammableSwitch,
-                    button.name,
-                    button.name
-                );
-
-            service.addLinkedService(labelService);
+                this.accessory.getService(this.homebridge.hap.Service.StatelessProgrammableSwitch) ||
+                this.accessory.addService(this.homebridge.hap.Service.StatelessProgrammableSwitch, button.name);
 
             service.setCharacteristic(this.homebridge.hap.Characteristic.Name, button.name);
-            service.setCharacteristic(this.homebridge.hap.Characteristic.ServiceLabelIndex, button.index);
+            service.setCharacteristic(this.homebridge.hap.Characteristic.ServiceLabelIndex, button.index + 1);
 
             service
                 .getCharacteristic(this.homebridge.hap.Characteristic.ProgrammableSwitchEvent)
@@ -46,8 +26,6 @@ export class Keypad extends Common implements Device {
         }
     }
 
-    public onUpdate(_state: Interfaces.DeviceState): void { /* no-op */ }
-
     public onAction(button: Interfaces.Button, action: Interfaces.Action): void {
         const service = this.services.get(button.id);
         const characteristic = service?.getCharacteristic(this.homebridge.hap.Characteristic.ProgrammableSwitchEvent);
@@ -55,14 +33,20 @@ export class Keypad extends Common implements Device {
         if (service != null && characteristic != null) {
             switch (action) {
                 case "Press":
+                    this.log.debug(`Keypad: ${this.device.name} ${button.name} Pressed`);
+
                     characteristic.updateValue(this.homebridge.hap.Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS);
                     break;
 
                 case "DoublePress":
+                    this.log.debug(`Keypad: ${this.device.name} ${button.name} Double Pressed`);
+
                     characteristic.updateValue(this.homebridge.hap.Characteristic.ProgrammableSwitchEvent.DOUBLE_PRESS);
                     break;
 
                 case "LongPress":
+                    this.log.debug(`Keypad: ${this.device.name} ${button.name} Long Pressed`);
+
                     characteristic.updateValue(this.homebridge.hap.Characteristic.ProgrammableSwitchEvent.LONG_PRESS);
                     break;
             }

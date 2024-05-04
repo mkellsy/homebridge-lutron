@@ -1,0 +1,13 @@
+{
+    "bridge": {
+        "name": "Development",
+        "username": "CC:22:3D:E3:CE:20",
+        "port": 51826,
+        "pin": "032-45-154"
+    },
+    "platforms": [
+        {
+            "platform": "LutronRA3"
+        }
+    ]
+}

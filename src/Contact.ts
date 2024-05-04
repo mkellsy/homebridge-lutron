@@ -4,7 +4,7 @@ import * as Interfaces from "@mkellsy/hap-device";
 import { Common } from "./Common";
 import { Device } from "./Device";
 
-export class Switch extends Common implements Device {
+export class Contact extends Common implements Device {
     private service: Homebridge.Service;
 
     constructor(homebridge: Homebridge.API, device: Interfaces.Switch, log: Homebridge.Logging) {
@@ -23,20 +23,20 @@ export class Switch extends Common implements Device {
     }
 
     public onUpdate(state: Interfaces.DeviceState): void {
-        this.log.debug(`Switch: ${this.device.name} state: ${state.state}`);
+        this.log.debug(`Contact: ${this.device.name} State: ${state.state}`);
 
-        this.service.updateCharacteristic(this.homebridge.hap.Characteristic.On, state.state === "On");
+        this.service.updateCharacteristic(this.homebridge.hap.Characteristic.On, state.state === "Closed");
     }
 
     private onGetState = (): Homebridge.CharacteristicValue => {
-        this.log.debug(`Switch get state: ${this.device.name} ${this.device.status.state}`);
+        this.log.debug(`Contact Get State: ${this.device.name} ${this.device.status.state}`);
 
-        return this.device.status.state === "On";
+        return this.device.status.state === "Closed";
     };
 
     private onSetState = (value: Homebridge.CharacteristicValue): void => {
-        this.log.debug(`Switch set state: ${this.device.name} ${value}`);
+        this.log.debug(`Contact Set State: ${this.device.name} ${value}`);
 
-        this.device.set({ state: value ? "On" : "Off" });
+        this.device.set({ state: value ? "Closed" : "Open" });
     };
 }

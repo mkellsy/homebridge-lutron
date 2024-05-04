@@ -2,40 +2,63 @@ import * as Homebridge from "homebridge";
 import * as Leap from "@mkellsy/leap-client";
 import * as Interfaces from "@mkellsy/hap-device";
 
-import { Device } from "./Device";
 import { DeviceFactory } from "./DeviceFactory";
 
-export class Platform implements Homebridge.DynamicPlatformPlugin {
-    private readonly homebridge: Homebridge.API;
-    private readonly accessories: Map<string, Homebridge.PlatformAccessory> = new Map();
-    private readonly devices: Map<string, Device> = new Map();
+import { accessories } from "./Accessories";
+import { defaults } from "./Config";
 
-    constructor(_log: Homebridge.Logging, _config: Homebridge.PlatformConfig, homebridge: Homebridge.API) {
+export class Platform implements Homebridge.DynamicPlatformPlugin {
+    private readonly log: Homebridge.Logging;
+    private readonly config: Homebridge.PlatformConfig;
+    private readonly homebridge: Homebridge.API;
+
+    constructor(log: Homebridge.Logging, config: Homebridge.PlatformConfig, homebridge: Homebridge.API) {
+        this.log = log;
+        this.config = { ...defaults, ...config };
         this.homebridge = homebridge;
 
-        Leap.connect().on("Available", this.onAvailable).on("Action", this.onAction).on("Update", this.onUpdate);
+        this.homebridge.on("didFinishLaunching", () => {
+            Leap.connect()
+                .on("Available", this.onAvailable)
+                .on("Action", this.onAction)
+                .on("Update", this.onUpdate);
+
+        });
     }
 
     public configureAccessory(accessory: Homebridge.PlatformAccessory): void {
-        this.accessories.set(accessory.UUID, accessory);
+        accessories.set(accessory.UUID, accessory);
     }
 
     private onAvailable = (devices: Interfaces.Device[]): void => {
         for (const device of devices) {
-            const id = this.homebridge.hap.uuid.generate(device.id);
-            const accessory = DeviceFactory.create(id, device, this.homebridge, this.accessories.get(id)).accessory;
+            const accessory = DeviceFactory.create(this.homebridge, device, this.config, this.log);
 
-            if (this.accessories.get(id) == null) {
-                this.accessories.set(id, accessory);
+            accessory?.register();
+
+            if (accessory == null) {
+                DeviceFactory.remove(this.homebridge, device);
             }
         }
     };
 
     private onAction = (device: Interfaces.Device, button: Interfaces.Button, action: Interfaces.Action): void => {
-        this.devices.get(device.id)?.onAction(button, action);
+        const accessory = DeviceFactory.get(this.homebridge, device);
+
+        if (accessory == null || accessory.onAction == null) {
+            return;
+        }
+
+        accessory.onAction(button, action);
     };
 
     private onUpdate = (device: Interfaces.Device, state: Interfaces.DeviceState): void => {
-        this.devices.get(device.id)?.onUpdate(state);
+        const accessory = DeviceFactory.get(this.homebridge, device);
+
+        if (accessory == null || accessory.onUpdate == null) {
+            return;
+        }
+
+        accessory.onUpdate(state);
     };
 }

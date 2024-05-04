@@ -1,26 +1,31 @@
 {
     "version": "0.0.2",
-    "name": "@mkellsy/homebridge-participle",
-    "displayName": "Homebridge Participle Plugin",
-    "description": "This participle plugin is a plugin that exposes evented clients to Homebridge that all use the same interfaces and events",
+    "name": "@mkellsy/homebridge-lutron-ra3",
+    "displayName": "Homebridge Lutron Radio RA3",
+    "description": "This is a plugin that exposes Lutron Radio RA3 devices to Homebridge.",
     "author": "Michael Kellsy",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/mkellsy/homebridge-participle"
+        "url": "https://github.com/mkellsy/homebridge-lutron-ra3"
     },
-    "homepage": "https://github.com/mkellsy/homebridge-participle",
+    "homepage": "https://github.com/mkellsy/homebridge-lutron-ra3",
     "main": "lib/index.js",
+    "keywords": [
+        "homebridge-plugin"
+    ],
     "files": [
         "/lib"
     ],
     "bin": {
-        "participle": "bin/participle"
+        "lutron": "bin/lutron"
     },
     "scripts": {
         "build": "rm -fR ./lib && tsc --project tsconfig.json",
-        "start": "npm run build && ./bin/participle -d start",
-        "pair": "npm run build && ./bin/participle -d pair"
+        "start": "npm run build && ./bin/lutron -d start",
+        "watch": "npm run build && npm link && nodemon",
+        "pair": "npm run build && ./bin/lutron -d pair",
+        "prepublishOnly": "npm run build"
     },
     "dependencies": {
         "@mkellsy/hap-device": "^1.0.3",
@@ -35,6 +40,8 @@
     "devDependencies": {
         "@types/debug": "^4.1.12",
         "@types/node": "^20.11.0",
+        "homebridge": "^1.8.1",
+        "nodemon": "^3.1.0",
         "typescript": "^5.3.3"
     }
 }

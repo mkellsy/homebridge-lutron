@@ -1,48 +1,97 @@
 import * as Homebridge from "homebridge";
 import * as Interfaces from "@mkellsy/hap-device";
 
+import { Contact } from "./Contact";
 import { Device } from "./Device";
 import { Dimmer } from "./Dimmer";
 import { Keypad } from "./Keypad";
 import { Occupancy } from "./Occupancy";
 import { Shade } from "./Shade";
+import { Strip } from "./Strip";
 import { Switch } from "./Switch";
-import { Unknown } from "./Unknown";
+
+import { accessories, devices, platform, plugin } from "./Accessories";
 
 export abstract class DeviceFactory {
     public static create(
-        id: string,
-        device: Interfaces.Device,
         homebridge: Homebridge.API,
-        accessory?: Homebridge.PlatformAccessory
-    ): Device {
+        device: Interfaces.Device,
+        config: Homebridge.PlatformConfig,
+        log: Homebridge.Logging
+    ): Device | undefined {
         switch (device.type) {
             case Interfaces.DeviceType.Contact:
-                return new Switch(id, device as Interfaces.Switch, homebridge, accessory);
-    
+                if (config.cco === false) {
+                    return undefined;
+                }
+
+                return new Contact(homebridge, device as Interfaces.Contact, log);
+
             case Interfaces.DeviceType.Dimmer:
-                return new Dimmer(id, device as Interfaces.Dimmer, homebridge, accessory);
-    
+                if (config.dimmers === false) {
+                    return undefined;
+                }
+
+                return new Dimmer(homebridge, device as Interfaces.Dimmer, log);
+
             case Interfaces.DeviceType.Keypad:
-                return new Keypad(id, device as Interfaces.Keypad, homebridge, accessory);
-    
+                if (config.keypads === false) {
+                    return undefined;
+                }
+
+                return new Keypad(homebridge, device as Interfaces.Keypad, log);
+
             case Interfaces.DeviceType.Occupancy:
-                return new Occupancy(id, device as Interfaces.Occupancy, homebridge, accessory);
-    
+                if (config.sensors === false) {
+                    return undefined;
+                }
+
+                return new Occupancy(homebridge, device as Interfaces.Occupancy, log);
+
             case Interfaces.DeviceType.Remote:
-                return new Keypad(id, device as Interfaces.Keypad, homebridge, accessory);
-    
+                if (config.remotes === false) {
+                    return undefined;
+                }
+
+                return new Keypad(homebridge, device as Interfaces.Keypad, log);
+
             case Interfaces.DeviceType.Shade:
-                return new Shade(id, device as Interfaces.Shade, homebridge, accessory);
-    
+                if (config.shades === false) {
+                    return undefined;
+                }
+
+                return new Shade(homebridge, device as Interfaces.Shade, log);
+
             case Interfaces.DeviceType.Strip:
-                return new Dimmer(id, device as Interfaces.Dimmer, homebridge, accessory);
-    
+                if (config.strips === false) {
+                    return undefined;
+                }
+
+                return new Strip(homebridge, device as Interfaces.Strip, log);
+
             case Interfaces.DeviceType.Switch:
-                return new Switch(id, device as Interfaces.Switch, homebridge, accessory);
-    
-            default:
-                return new Unknown(id, device as Interfaces.Unknown, homebridge, accessory);
+                if (config.switches === false) {
+                    return undefined;
+                }
+
+                return new Switch(homebridge, device as Interfaces.Switch, log);
+        }
+
+        return undefined;
+    }
+
+    public static get(homebridge: Homebridge.API, device: Interfaces.Device): Device | undefined {
+        const id = homebridge.hap.uuid.generate(device.id);
+
+        return devices.get(id);
+    }
+
+    public static remove(homebridge: Homebridge.API, device: Interfaces.Device): void {
+        const id = homebridge.hap.uuid.generate(device.id);
+        const accessory = accessories.get(id);
+
+        if (accessory != null) {
+            homebridge.unregisterPlatformAccessories(plugin, platform, [accessory]);
         }
     }
 }
