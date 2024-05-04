@@ -19,7 +19,7 @@ After you have a processor paired, you can start Homebridge.
 ## Configuration
 This plugin doesn't require any configuration other than the platform to work. The default is to expose remotes, keypads and sensors.
 
-```
+```json
 {
     "platforms": [
         {
@@ -31,7 +31,7 @@ This plugin doesn't require any configuration other than the platform to work. T
 
 You can turn on other devices too. These devices are not turned on because they are already exposed by Lutron's HomeKit integration.
 
-```
+```json
 {
     "platforms": [
         {
