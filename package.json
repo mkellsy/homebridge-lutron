@@ -12,7 +12,14 @@
     "homepage": "https://github.com/mkellsy/homebridge-lutron",
     "main": "lib/index.js",
     "keywords": [
-        "homebridge-plugin"
+        "homebridge-plugin",
+        "lutron-leap",
+        "lutron",
+        "caseta",
+        "ra3",
+        "radiora3",
+        "lutron-ra3",
+        "lutron-radiora3"
     ],
     "files": [
         "/lib",
