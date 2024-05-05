@@ -29,7 +29,7 @@
         "lutron": "bin/lutron"
     },
     "scripts": {
-        "build": "rm -fR ./lib && esbuild src/index.ts --bundle --minify --sourcemap --platform=node --packages=external --outfile=lib/index.js && esbuild src/CLI.ts --bundle --minify --sourcemap --platform=node --packages=external --outfile=lib/cli.js && tsc --emitDeclarationOnly --outDir lib --project tsconfig.json",
+        "build": "./build",
         "start": "npm run build && ./bin/lutron -d start",
         "watch": "npm run build && npm link && nodemon",
         "pair": "npm run build && ./bin/lutron -d pair",
