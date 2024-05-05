@@ -1,7 +1,7 @@
 {
-    "version": "1.0.5",
+    "version": "1.0.7",
     "name": "@mkellsy/homebridge-lutron",
-    "displayName": "Homebridge Lutron for Caseta and Radio RA3",
+    "displayName": "Homebridge Lutron",
     "description": "This is a plugin that exposes Lutron LEAP devices to Homebridge.",
     "author": "Michael Kellsy",
     "license": "MIT",
