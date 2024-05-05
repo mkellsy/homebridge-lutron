@@ -1,15 +1,15 @@
 {
-    "version": "1.0.2",
-    "name": "@mkellsy/homebridge-lutron-ra3",
-    "displayName": "Homebridge Lutron Radio RA3",
-    "description": "This is a plugin that exposes Lutron Radio RA3 devices to Homebridge.",
+    "version": "1.0.5",
+    "name": "@mkellsy/homebridge-lutron",
+    "displayName": "Homebridge Lutron for Caseta and Radio RA3",
+    "description": "This is a plugin that exposes Lutron LEAP devices to Homebridge.",
     "author": "Michael Kellsy",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/mkellsy/homebridge-lutron-ra3"
+        "url": "https://github.com/mkellsy/homebridge-lutron"
     },
-    "homepage": "https://github.com/mkellsy/homebridge-lutron-ra3",
+    "homepage": "https://github.com/mkellsy/homebridge-lutron",
     "main": "lib/index.js",
     "keywords": [
         "homebridge-plugin"
@@ -22,7 +22,7 @@
         "lutron": "bin/lutron"
     },
     "scripts": {
-        "build": "rm -fR ./lib && tsc --project tsconfig.json",
+        "build": "rm -fR ./lib && esbuild src/index.ts --bundle --minify --sourcemap --platform=node --packages=external --outfile=lib/index.js && esbuild src/CLI.ts --bundle --minify --sourcemap --platform=node --packages=external --outfile=lib/cli.js && tsc --emitDeclarationOnly --outDir lib --project tsconfig.json",
         "start": "npm run build && ./bin/lutron -d start",
         "watch": "npm run build && npm link && nodemon",
         "pair": "npm run build && ./bin/lutron -d pair",
@@ -41,6 +41,7 @@
     "devDependencies": {
         "@types/debug": "^4.1.12",
         "@types/node": "^20.11.0",
+        "esbuild": "^0.20.2",
         "homebridge": "^1.8.1",
         "nodemon": "^3.1.0",
         "typescript": "^5.3.3"

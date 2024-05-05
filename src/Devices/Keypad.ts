@@ -1,13 +1,13 @@
-import * as Homebridge from "homebridge";
-import * as Interfaces from "@mkellsy/hap-device";
+import { API, Logging, Service } from "homebridge";
+import { Action, Button, Keypad as IKeypad } from "@mkellsy/hap-device";
 
 import { Common } from "./Common";
-import { Device } from "./Device";
+import { Device } from "../Interfaces/Device";
 
 export class Keypad extends Common implements Device {
-    private services: Map<string, Homebridge.Service> = new Map();
+    private services: Map<string, Service> = new Map();
 
-    constructor(homebridge: Homebridge.API, device: Interfaces.Keypad, log: Homebridge.Logging) {
+    constructor(homebridge: API, device: IKeypad, log: Logging) {
         super(homebridge, device, log);
 
         const labelService =
@@ -37,7 +37,7 @@ export class Keypad extends Common implements Device {
         }
     }
 
-    public onAction(button: Interfaces.Button, action: Interfaces.Action): void {
+    public onAction(button: Button, action: Action): void {
         const service = this.services.get(button.id);
         const characteristic = service?.getCharacteristic(this.homebridge.hap.Characteristic.ProgrammableSwitchEvent);
 

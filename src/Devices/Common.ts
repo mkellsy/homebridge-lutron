@@ -1,17 +1,17 @@
-import * as Homebridge from "homebridge";
-import * as Interfaces from "@mkellsy/hap-device";
+import { API, Logging, PlatformAccessory } from "homebridge";
+import { Device } from "@mkellsy/hap-device";
 
-import { accessories, devices, platform, plugin } from "./Platform";
+import { accessories, devices, platform, plugin } from "../Platform";
 
 export abstract class Common {
     public readonly id: string;
-    public readonly accessory: Homebridge.PlatformAccessory;
+    public readonly accessory: PlatformAccessory;
 
-    protected readonly log: Homebridge.Logging;
-    protected readonly homebridge: Homebridge.API;
-    protected readonly device: Interfaces.Device;
+    protected readonly log: Logging;
+    protected readonly homebridge: API;
+    protected readonly device: Device;
 
-    constructor(homebridge: Homebridge.API, device: Interfaces.Device, log: Homebridge.Logging) {
+    constructor(homebridge: API, device: Device, log: Logging) {
         this.log = log;
         this.homebridge = homebridge;
         this.device = device;

@@ -1,92 +1,88 @@
-import * as Homebridge from "homebridge";
-import * as Interfaces from "@mkellsy/hap-device";
-
-import { Contact } from "./Contact";
-import { Device } from "./Device";
-import { Dimmer } from "./Dimmer";
-import { Keypad } from "./Keypad";
-import { Occupancy } from "./Occupancy";
-import { Shade } from "./Shade";
-import { Strip } from "./Strip";
-import { Switch } from "./Switch";
+import { API, Logging, PlatformConfig } from "homebridge";
+import { DeviceType, Device as IDevice, Keypad as IKeypad } from "@mkellsy/hap-device";
 
 import { accessories, devices, platform, plugin } from "./Platform";
 
+import { Contact } from "./Devices/Contact";
+import { Dimmer } from "./Devices/Dimmer";
+import { Keypad } from "./Devices/Keypad";
+import { Occupancy } from "./Devices/Occupancy";
+import { Shade } from "./Devices/Shade";
+import { Strip } from "./Devices/Strip";
+import { Switch } from "./Devices/Switch";
+
+import { Device } from "./Interfaces/Device";
+
 export abstract class Accessories {
-    public static create(
-        homebridge: Homebridge.API,
-        device: Interfaces.Device,
-        config: Homebridge.PlatformConfig,
-        log: Homebridge.Logging
-    ): Device | undefined {
+    public static create(homebridge: API, device: IDevice, config: PlatformConfig, log: Logging): Device | undefined {
         switch (device.type) {
-            case Interfaces.DeviceType.Contact:
+            case DeviceType.Contact:
                 if (config.cco === false) {
                     return undefined;
                 }
 
-                return new Contact(homebridge, device as Interfaces.Contact, log);
+                return new Contact(homebridge, device, log);
 
-            case Interfaces.DeviceType.Dimmer:
+            case DeviceType.Dimmer:
                 if (config.dimmers === false) {
                     return undefined;
                 }
 
-                return new Dimmer(homebridge, device as Interfaces.Dimmer, log);
+                return new Dimmer(homebridge, device, log);
 
-            case Interfaces.DeviceType.Keypad:
+            case DeviceType.Keypad:
                 if (config.keypads === false) {
                     return undefined;
                 }
 
-                return new Keypad(homebridge, device as Interfaces.Keypad, log);
+                return new Keypad(homebridge, device as IKeypad, log);
 
-            case Interfaces.DeviceType.Occupancy:
+            case DeviceType.Occupancy:
                 if (config.sensors === false) {
                     return undefined;
                 }
 
-                return new Occupancy(homebridge, device as Interfaces.Occupancy, log);
+                return new Occupancy(homebridge, device, log);
 
-            case Interfaces.DeviceType.Remote:
+            case DeviceType.Remote:
                 if (config.remotes === false) {
                     return undefined;
                 }
 
-                return new Keypad(homebridge, device as Interfaces.Keypad, log);
+                return new Keypad(homebridge, device as IKeypad, log);
 
-            case Interfaces.DeviceType.Shade:
+            case DeviceType.Shade:
                 if (config.shades === false) {
                     return undefined;
                 }
 
-                return new Shade(homebridge, device as Interfaces.Shade, log);
+                return new Shade(homebridge, device, log);
 
-            case Interfaces.DeviceType.Strip:
+            case DeviceType.Strip:
                 if (config.strips === false) {
                     return undefined;
                 }
 
-                return new Strip(homebridge, device as Interfaces.Strip, log);
+                return new Strip(homebridge, device, log);
 
-            case Interfaces.DeviceType.Switch:
+            case DeviceType.Switch:
                 if (config.switches === false) {
                     return undefined;
                 }
 
-                return new Switch(homebridge, device as Interfaces.Switch, log);
+                return new Switch(homebridge, device, log);
         }
 
         return undefined;
     }
 
-    public static get(homebridge: Homebridge.API, device: Interfaces.Device): Device | undefined {
+    public static get(homebridge: API, device: IDevice): Device | undefined {
         const id = homebridge.hap.uuid.generate(device.id);
 
         return devices.get(id);
     }
 
-    public static remove(homebridge: Homebridge.API, device: Interfaces.Device): void {
+    public static remove(homebridge: API, device: IDevice): void {
         const id = homebridge.hap.uuid.generate(device.id);
         const accessory = accessories.get(id);
 

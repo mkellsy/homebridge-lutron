@@ -1,13 +1,13 @@
-import * as Homebridge from "homebridge";
-import * as Interfaces from "@mkellsy/hap-device";
+import { API, CharacteristicValue, Logging, Service } from "homebridge";
+import { DeviceState, Occupancy as IOccupancy } from "@mkellsy/hap-device";
 
 import { Common } from "./Common";
-import { Device } from "./Device";
+import { Device } from "../Interfaces/Device";
 
 export class Occupancy extends Common implements Device {
-    private service: Homebridge.Service;
+    private service: Service;
 
-    constructor(homebridge: Homebridge.API, device: Interfaces.Occupancy, log: Homebridge.Logging) {
+    constructor(homebridge: API, device: IOccupancy, log: Logging) {
         super(homebridge, device, log);
 
         this.service =
@@ -18,7 +18,7 @@ export class Occupancy extends Common implements Device {
         this.service.getCharacteristic(this.homebridge.hap.Characteristic.OccupancyDetected).onGet(this.onGetState);
     }
 
-    public onUpdate(state: Interfaces.DeviceState): void {
+    public onUpdate(state: DeviceState): void {
         this.log.debug(
             `Occupancy: ${this.device.name} State: ${state.state === "Occupied" ? "Detected" : "Not Detected"}`
         );
@@ -29,7 +29,7 @@ export class Occupancy extends Common implements Device {
         );
     }
 
-    private onGetState = (): Homebridge.CharacteristicValue => {
+    private onGetState = (): CharacteristicValue => {
         this.log.debug(`Occupancy Get State: ${this.device.name} ${this.device.status.state}`);
 
         return this.device.status.state === "Occupied";

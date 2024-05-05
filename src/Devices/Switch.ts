@@ -1,13 +1,13 @@
-import * as Homebridge from "homebridge";
-import * as Interfaces from "@mkellsy/hap-device";
+import { API, CharacteristicValue, Logging, Service } from "homebridge";
+import { DeviceState, Switch as ISwitch } from "@mkellsy/hap-device";
 
 import { Common } from "./Common";
-import { Device } from "./Device";
+import { Device } from "../Interfaces/Device";
 
 export class Switch extends Common implements Device {
-    private service: Homebridge.Service;
+    private service: Service;
 
-    constructor(homebridge: Homebridge.API, device: Interfaces.Switch, log: Homebridge.Logging) {
+    constructor(homebridge: API, device: ISwitch, log: Logging) {
         super(homebridge, device, log);
 
         this.service =
@@ -22,19 +22,19 @@ export class Switch extends Common implements Device {
             .onSet(this.onSetState);
     }
 
-    public onUpdate(state: Interfaces.DeviceState): void {
+    public onUpdate(state: DeviceState): void {
         this.log.debug(`Switch: ${this.device.name} state: ${state.state}`);
 
         this.service.updateCharacteristic(this.homebridge.hap.Characteristic.On, state.state === "On");
     }
 
-    private onGetState = (): Homebridge.CharacteristicValue => {
+    private onGetState = (): CharacteristicValue => {
         this.log.debug(`Switch get state: ${this.device.name} ${this.device.status.state}`);
 
         return this.device.status.state === "On";
     };
 
-    private onSetState = (value: Homebridge.CharacteristicValue): void => {
+    private onSetState = (value: CharacteristicValue): void => {
         this.log.debug(`Switch set state: ${this.device.name} ${value}`);
 
         this.device.set({ state: value ? "On" : "Off" });

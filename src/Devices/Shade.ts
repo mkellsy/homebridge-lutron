@@ -1,13 +1,13 @@
-import * as Homebridge from "homebridge";
-import * as Interfaces from "@mkellsy/hap-device";
+import { API, CharacteristicValue, Logging, Service } from "homebridge";
+import { DeviceState, Shade as IShade } from "@mkellsy/hap-device";
 
 import { Common } from "./Common";
-import { Device } from "./Device";
+import { Device } from "../Interfaces/Device";
 
 export class Shade extends Common implements Device {
-    private service: Homebridge.Service;
+    private service: Service;
 
-    constructor(homebridge: Homebridge.API, device: Interfaces.Shade, log: Homebridge.Logging) {
+    constructor(homebridge: API, device: IShade, log: Logging) {
         super(homebridge, device, log);
 
         this.service =
@@ -26,23 +26,23 @@ export class Shade extends Common implements Device {
             .onSet(this.onSetPosition);
     }
 
-    public onUpdate(state: Interfaces.DeviceState): void {
+    public onUpdate(state: DeviceState): void {
         this.log.debug(`Shade: ${this.device.name} Position: ${state.level}`);
 
         this.service.updateCharacteristic(this.homebridge.hap.Characteristic.TargetPosition, state.level || 0);
     }
 
-    private onGetState = (): Homebridge.CharacteristicValue => {
+    private onGetState = (): CharacteristicValue => {
         return this.homebridge.hap.Characteristic.PositionState.STOPPED;
     }
 
-    private onGetPosition = (): Homebridge.CharacteristicValue => {
+    private onGetPosition = (): CharacteristicValue => {
         this.log.debug(`Shade Get Position: ${this.device.name} ${this.device.status.state}`);
 
         return this.device.status.level || 0;
     };
 
-    private onSetPosition = (value: Homebridge.CharacteristicValue): void => {
+    private onSetPosition = (value: CharacteristicValue): void => {
         this.log.debug(`Shade Set Position: ${this.device.name} ${value}`);
 
         this.device.set({ level: value as number });

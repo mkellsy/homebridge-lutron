@@ -2,7 +2,7 @@
     "watch": ["src"],
     "ext": "ts",
     "ignore": [],
-    "exec": "tsc --project tsconfig.json && homebridge --debug --user-storage-path ./storage",
+    "exec": "esbuild src/index.ts --bundle --minify --sourcemap --platform=node --packages=external --outfile=lib/index.js && homebridge --debug --user-storage-path ./storage",
     "signal": "SIGTERM",
     "env": {
         "NODE_OPTIONS": "--trace-warnings"

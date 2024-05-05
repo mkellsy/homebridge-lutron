@@ -1,44 +1,41 @@
-import * as Homebridge from "homebridge";
 import * as Leap from "@mkellsy/leap-client";
-import * as Interfaces from "@mkellsy/hap-device";
+
+import { API, DynamicPlatformPlugin, Logging, PlatformAccessory, PlatformConfig } from "homebridge";
+import { Action, Button, Device as IDevice, DeviceState } from "@mkellsy/hap-device";
 
 import { Accessories } from "./Accessories";
-import { Device } from "./Device";
+import { Device } from "./Interfaces/Device";
 
-import { defaults } from "./Config";
+import { defaults } from "./Interfaces/Config";
 
-const accessories: Map<string, Homebridge.PlatformAccessory> = new Map();
+const accessories: Map<string, PlatformAccessory> = new Map();
 const devices: Map<string, Device> = new Map();
 
-const platform: string = "LutronRA3";
-const plugin: string = "@mkellsy/homebridge-lutron-ra3";
+const platform: string = "Lutron";
+const plugin: string = "@mkellsy/homebridge-lutron";
 
 export { accessories, devices, platform, plugin };
 
-export class Platform implements Homebridge.DynamicPlatformPlugin {
-    private readonly log: Homebridge.Logging;
-    private readonly config: Homebridge.PlatformConfig;
-    private readonly homebridge: Homebridge.API;
+export class Platform implements DynamicPlatformPlugin {
+    private readonly log: Logging;
+    private readonly config: PlatformConfig;
+    private readonly homebridge: API;
 
-    constructor(log: Homebridge.Logging, config: Homebridge.PlatformConfig, homebridge: Homebridge.API) {
+    constructor(log: Logging, config: PlatformConfig, homebridge: API) {
         this.log = log;
         this.config = { ...defaults, ...config };
         this.homebridge = homebridge;
 
         this.homebridge.on("didFinishLaunching", () => {
-            Leap.connect()
-                .on("Available", this.onAvailable)
-                .on("Action", this.onAction)
-                .on("Update", this.onUpdate);
-
+            Leap.connect().on("Available", this.onAvailable).on("Action", this.onAction).on("Update", this.onUpdate);
         });
     }
 
-    public configureAccessory(accessory: Homebridge.PlatformAccessory): void {
+    public configureAccessory(accessory: PlatformAccessory): void {
         accessories.set(accessory.UUID, accessory);
     }
 
-    private onAvailable = (devices: Interfaces.Device[]): void => {
+    private onAvailable = (devices: IDevice[]): void => {
         for (const device of devices) {
             const accessory = Accessories.create(this.homebridge, device, this.config, this.log);
 
@@ -50,7 +47,7 @@ export class Platform implements Homebridge.DynamicPlatformPlugin {
         }
     };
 
-    private onAction = (device: Interfaces.Device, button: Interfaces.Button, action: Interfaces.Action): void => {
+    private onAction = (device: IDevice, button: Button, action: Action): void => {
         const accessory = Accessories.get(this.homebridge, device);
 
         if (accessory == null || accessory.onAction == null) {
@@ -60,7 +57,7 @@ export class Platform implements Homebridge.DynamicPlatformPlugin {
         accessory.onAction(button, action);
     };
 
-    private onUpdate = (device: Interfaces.Device, state: Interfaces.DeviceState): void => {
+    private onUpdate = (device: IDevice, state: DeviceState): void => {
         const accessory = Accessories.get(this.homebridge, device);
 
         if (accessory == null || accessory.onUpdate == null) {

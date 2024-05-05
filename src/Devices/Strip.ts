@@ -1,13 +1,13 @@
-import * as Homebridge from "homebridge";
-import * as Interfaces from "@mkellsy/hap-device";
+import { API, CharacteristicValue, Logging, Service } from "homebridge";
+import { DeviceState, Strip as IStrip } from "@mkellsy/hap-device";
 
 import { Common } from "./Common";
-import { Device } from "./Device";
+import { Device } from "../Interfaces/Device";
 
 export class Strip extends Common implements Device {
-    private service: Homebridge.Service;
+    private service: Service;
 
-    constructor(homebridge: Homebridge.API, device: Interfaces.Strip, log: Homebridge.Logging) {
+    constructor(homebridge: API, device: IStrip, log: Logging) {
         super(homebridge, device, log);
 
         this.service =
@@ -32,7 +32,7 @@ export class Strip extends Common implements Device {
             .onSet(this.onSetTemperature);
     }
 
-    public onUpdate(state: Interfaces.DeviceState): void {
+    public onUpdate(state: DeviceState): void {
         const luminance = Math.max(state.luminance || 1800, 1800);
         const temperature = Math.floor(((luminance - 1800) / 1200) * 360 + 140);
 
@@ -46,31 +46,31 @@ export class Strip extends Common implements Device {
         this.service.updateCharacteristic(this.homebridge.hap.Characteristic.ColorTemperature, temperature);
     }
 
-    private onGetState = (): Homebridge.CharacteristicValue => {
+    private onGetState = (): CharacteristicValue => {
         this.log.debug(`Strip Get State: ${this.device.name} ${this.device.status.state}`);
 
         return this.device.status.state === "On";
     };
 
-    private onSetState = (value: Homebridge.CharacteristicValue): void => {
+    private onSetState = (value: CharacteristicValue): void => {
         this.log.debug(`Strip Set State: ${this.device.name} ${value}`);
 
         this.device.set({ state: value ? "On" : "Off" });
     };
 
-    private onGetBrightness = (): Homebridge.CharacteristicValue => {
+    private onGetBrightness = (): CharacteristicValue => {
         this.log.debug(`Strip Get Brightness: ${this.device.name} ${this.device.status.level}`);
 
         return this.device.status.level || 0;
     };
 
-    private onSetBrightness = (value: Homebridge.CharacteristicValue): void => {
+    private onSetBrightness = (value: CharacteristicValue): void => {
         this.log.debug(`Strip Set Brightness: ${this.device.name} ${value}`);
 
         this.device.set({ level: value as number });
     };
 
-    private onGetTemperature = (): Homebridge.CharacteristicValue => {
+    private onGetTemperature = (): CharacteristicValue => {
         const luminance = Math.max(this.device.status.luminance || 1800, 1800);
         const temperature = Math.floor(((luminance - 1800) / 1200) * 360 + 140);
 
@@ -80,7 +80,7 @@ export class Strip extends Common implements Device {
         return temperature;
     };
 
-    private onSetTemperature = (value: Homebridge.CharacteristicValue): void => {
+    private onSetTemperature = (value: CharacteristicValue): void => {
         const temperature = Math.max((value as number) || 140, 140);
         const luminance = Math.floor(((temperature - 140) / 360) * 1200 + 1800);
 
