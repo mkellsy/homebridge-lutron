@@ -36,8 +36,8 @@
         "prepublishOnly": "npm run build"
     },
     "dependencies": {
-        "@mkellsy/hap-device": "^1.1.1",
-        "@mkellsy/leap-client": "^1.1.1",
+        "@mkellsy/hap-device": "^1.1.2",
+        "@mkellsy/leap-client": "^1.1.2",
         "colors": "^1.4.0",
         "commander": "^10.0.1",
         "js-logger": "^1.6.1"
