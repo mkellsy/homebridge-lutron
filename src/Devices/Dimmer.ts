@@ -18,8 +18,7 @@ export class Dimmer extends Common implements Device {
 
         this.service
             .getCharacteristic(this.homebridge.hap.Characteristic.On)
-            .onGet(this.onGetState)
-            .onSet(this.onSetState);
+            .onGet(this.onGetState);
 
         this.service
             .getCharacteristic(this.homebridge.hap.Characteristic.Brightness)
@@ -29,7 +28,7 @@ export class Dimmer extends Common implements Device {
 
     public onUpdate(state: DeviceState): void {
         this.log.debug(`Dimmer: ${this.device.name} State: ${state.state}`);
-        this.log.debug(`Dimmer: ${this.device.name} Brightness: ${state.level}`);
+        this.log.debug(`Dimmer: ${this.device.name} Brightness: ${state.level || 0}`);
 
         this.service.updateCharacteristic(this.homebridge.hap.Characteristic.On, state.state === "On");
         this.service.updateCharacteristic(this.homebridge.hap.Characteristic.Brightness, state.level || 0);
@@ -41,21 +40,19 @@ export class Dimmer extends Common implements Device {
         return this.device.status.state === "On";
     };
 
-    private onSetState = (value: CharacteristicValue): void => {
-        this.log.debug(`Dimmer Set State: ${this.device.name} ${value}`);
-
-        this.device.set({ state: value ? "On" : "Off" });
-    };
-
     private onGetBrightness = (): CharacteristicValue => {
-        this.log.debug(`Dimmer Get Brightness: ${this.device.name} ${this.device.status.level}`);
+        this.log.debug(`Dimmer Get Brightness: ${this.device.name} ${this.device.status.level || 0}`);
 
         return this.device.status.level || 0;
     };
 
     private onSetBrightness = (value: CharacteristicValue): void => {
-        this.log.debug(`Dimmer Set Brightness: ${this.device.name} ${value}`);
+        const level = (value || 0) as number;
+        const state = level > 0 ? "On" : "Off";
 
-        this.device.set({ level: value as number });
+        this.log.debug(`Dimmer Set State: ${this.device.name} ${state}`);
+        this.log.debug(`Dimmer Set Brightness: ${this.device.name} ${level}`);
+
+        this.device.set({ state, level });
     };
 }

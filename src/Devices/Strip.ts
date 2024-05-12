@@ -18,8 +18,7 @@ export class Strip extends Common implements Device {
 
         this.service
             .getCharacteristic(this.homebridge.hap.Characteristic.On)
-            .onGet(this.onGetState)
-            .onSet(this.onSetState);
+            .onGet(this.onGetState);
 
         this.service
             .getCharacteristic(this.homebridge.hap.Characteristic.Brightness)
@@ -52,22 +51,19 @@ export class Strip extends Common implements Device {
         return this.device.status.state === "On";
     };
 
-    private onSetState = (value: CharacteristicValue): void => {
-        this.log.debug(`Strip Set State: ${this.device.name} ${value}`);
-
-        this.device.set({ state: value ? "On" : "Off" });
-    };
-
     private onGetBrightness = (): CharacteristicValue => {
-        this.log.debug(`Strip Get Brightness: ${this.device.name} ${this.device.status.level}`);
+        this.log.debug(`Strip Get Brightness: ${this.device.name} ${this.device.status.level || 0}`);
 
         return this.device.status.level || 0;
     };
 
     private onSetBrightness = (value: CharacteristicValue): void => {
+        const level = (value || 0) as number;
+        const state = level > 0 ? "On" : "Off";
+
         this.log.debug(`Strip Set Brightness: ${this.device.name} ${value}`);
 
-        this.device.set({ level: value as number });
+        this.device.set({ state, level });
     };
 
     private onGetTemperature = (): CharacteristicValue => {
@@ -81,12 +77,14 @@ export class Strip extends Common implements Device {
     };
 
     private onSetTemperature = (value: CharacteristicValue): void => {
+        const state = this.device.status.state;
+        const level = this.device.status.level || 0;
         const temperature = Math.max((value as number) || 140, 140);
         const luminance = Math.floor(((temperature - 140) / 360) * 1200 + 1800);
 
         this.log.debug(`Strip Set Luminance: ${this.device.name} ${luminance}`);
         this.log.debug(`Strip Set Temperature: ${this.device.name} ${temperature}`);
 
-        this.device.set({ luminance });
+        this.device.set({ state, level, luminance });
     };
 }

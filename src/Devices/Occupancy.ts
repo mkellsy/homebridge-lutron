@@ -19,9 +19,7 @@ export class Occupancy extends Common implements Device {
     }
 
     public onUpdate(state: DeviceState): void {
-        this.log.debug(
-            `Occupancy: ${this.device.name} State: ${state.state === "Occupied" ? "Detected" : "Not Detected"}`
-        );
+        this.log.debug(`Occupancy: ${this.device.name} State: ${state.state === "Occupied" ? "Detected" : "Not Detected"}`);
 
         this.service.updateCharacteristic(
             this.homebridge.hap.Characteristic.OccupancyDetected,

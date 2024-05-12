@@ -35,7 +35,7 @@ export class Switch extends Common implements Device {
     };
 
     private onSetState = (value: CharacteristicValue): void => {
-        this.log.debug(`Switch set state: ${this.device.name} ${value}`);
+        this.log.debug(`Switch set state: ${this.device.name} ${value ? "On" : "Off"}`);
 
         this.device.set({ state: value ? "On" : "Off" });
     };
