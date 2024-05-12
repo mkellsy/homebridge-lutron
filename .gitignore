@@ -132,3 +132,4 @@ dist
 # build output
 lib/
 storage/
+authority
