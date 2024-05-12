@@ -18,7 +18,7 @@ const options = {
     sourcemap: true,
     target: "es6",
     platform: "node",
-    packages: "external",
+    external: ["homebridge"],
     logLevel: "error",
     legalComments: "none",
 };
