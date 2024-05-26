@@ -1,5 +1,5 @@
 {
-    "version": "1.2.3",
+    "version": "1.2.4",
     "name": "@mkellsy/homebridge-lutron",
     "displayName": "Homebridge Lutron",
     "description": "This is a plugin that exposes Lutron LEAP devices to Homebridge.",
@@ -30,10 +30,9 @@
         "lutron": "bin/lutron"
     },
     "scripts": {
-        "build": "./build",
-        "start": "npm run build && ./bin/lutron -d start",
+        "build": "node ./build",
         "watch": "npm run build && npm link && nodemon",
-        "pair": "npm run build && ./bin/lutron -d pair",
+        "pair": "npm run build && node ./bin/lutron -d pair",
         "prepublishOnly": "npm run build"
     },
     "peerDependencies": {
@@ -41,7 +40,7 @@
     },
     "devDependencies": {
         "@mkellsy/hap-device": "^1.2.1",
-        "@mkellsy/leap-client": "^1.2.1",
+        "@mkellsy/leap-client": "^1.2.2",
         "@types/debug": "^4.1.12",
         "@types/node": "^20.11.0",
         "colors": "^1.4.0",

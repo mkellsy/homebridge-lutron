@@ -2,7 +2,7 @@
     "watch": ["src"],
     "ext": "ts",
     "ignore": [],
-    "exec": "./build && homebridge --debug --user-storage-path ./storage",
+    "exec": "node ./build && homebridge --debug --user-storage-path ./storage",
     "signal": "SIGTERM",
     "env": {
         "NODE_OPTIONS": "--trace-warnings"
