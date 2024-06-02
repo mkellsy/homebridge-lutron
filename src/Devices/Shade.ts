@@ -16,9 +16,7 @@ export class Shade extends Common implements Device {
 
         this.service.setCharacteristic(this.homebridge.hap.Characteristic.Name, this.device.name);
         this.service.getCharacteristic(this.homebridge.hap.Characteristic.CurrentPosition).onGet(this.onGetPosition);
-
-        this.service.getCharacteristic(this.homebridge.hap.Characteristic.PositionState)
-            .onGet(this.onGetState);
+        this.service.getCharacteristic(this.homebridge.hap.Characteristic.PositionState).onGet(this.onGetState);
 
         this.service
             .getCharacteristic(this.homebridge.hap.Characteristic.TargetPosition)
@@ -34,7 +32,7 @@ export class Shade extends Common implements Device {
 
     private onGetState = (): CharacteristicValue => {
         return this.homebridge.hap.Characteristic.PositionState.STOPPED;
-    }
+    };
 
     private onGetPosition = (): CharacteristicValue => {
         this.log.debug(`Shade Get Position: ${this.device.name} ${this.device.status.state}`);

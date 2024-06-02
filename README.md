@@ -1,7 +1,9 @@
 # Homebridge Lutron
+
 This is a plugin that exposes Lutron Caseta and Radio RA3 devices to Homebridge.
 
 ## CLI
+
 Pairing a processor or bridge
 
 ```
@@ -17,6 +19,7 @@ If you have multiple systems Caseta and RA3, you can pair other processors or br
 After you have a processor or bridge paired, you can start Homebridge.
 
 ## Configuration
+
 This plugin doesn't require any configuration other than the platform to work. The default is to expose remotes, keypads and sensors.
 
 ```json
@@ -50,4 +53,5 @@ You can turn on other devices too. These devices are not turned on because they 
 ```
 
 ## Support
+
 I offer not support for this plugin, it is published only for personal use.

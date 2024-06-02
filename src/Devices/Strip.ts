@@ -15,10 +15,7 @@ export class Strip extends Common implements Device {
             this.accessory.addService(this.homebridge.hap.Service.Lightbulb, this.device.name);
 
         this.service.setCharacteristic(this.homebridge.hap.Characteristic.Name, this.device.name);
-
-        this.service
-            .getCharacteristic(this.homebridge.hap.Characteristic.On)
-            .onGet(this.onGetState);
+        this.service.getCharacteristic(this.homebridge.hap.Characteristic.On).onGet(this.onGetState);
 
         this.service
             .getCharacteristic(this.homebridge.hap.Characteristic.Brightness)

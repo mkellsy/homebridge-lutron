@@ -9,7 +9,7 @@ export type Log = Console.ILogger;
 
 export abstract class Logger {
     static configure(program: Command) {
-        const formatter = (messages: any[], context: any): void => {
+        const formatter: Console.ILogHandler = (messages, context) => {
             if (context.name != null) {
                 messages.unshift(Colors.cyan(context.name));
             }
@@ -32,7 +32,7 @@ export abstract class Logger {
         return Console.get(name);
     }
 
-    static inspect(value: any): string {
+    static inspect(value: object): string {
         return Colors.dim(
             inspect(value, {
                 showHidden: false,
@@ -40,7 +40,7 @@ export abstract class Logger {
                 colors: true,
                 compact: true,
                 breakLength: Infinity,
-            })
+            }),
         );
     }
 }
