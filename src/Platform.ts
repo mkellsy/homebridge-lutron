@@ -41,6 +41,8 @@ export class Platform implements DynamicPlatformPlugin {
 
             accessory?.register();
 
+            this.log.debug(`${device.type} available ${device.name}`);
+
             if (accessory == null) {
                 Accessories.remove(this.homebridge, device);
             }

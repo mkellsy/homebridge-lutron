@@ -18,6 +18,25 @@ If you have multiple systems Caseta and RA3, you can pair other processors or br
 
 After you have a processor or bridge paired, you can start Homebridge.
 
+## Devices
+
+This pulgin supports most of the devices available in Caseda and RA3. By default, only devices that are not nativally supported are exposed to Homebridge. These devices are exposed to Homebridge by default.
+
+* Pico Remotes (All types are aupported, including 4 button scene remotes)
+* Sunnata Keypads (All types, including both hybrid and non-hybrid)
+* Occupancy Sensors
+* Timeclocks
+
+You can enable the other types via the configuration.
+
+## Timeclocks
+
+Timeclocks are a feature of RA3. They are programmed via the Lutron Designer. These are exposed as switches in Homebridge, and allow you to intergrate Lutron Timeclocks into HomeKit Automations.
+
+## Keypads
+
+Sunnata keypads are a feature of RA3. They behave similar to Pico remotes, but since they do not emit a release event, HomeKit double presses and long presses are not supported. They do show up in HomeKit, but assigning actions to these will not work. Only single presses are supported.
+
 ## Configuration
 
 This plugin doesn't require any configuration other than the platform to work. The default is to expose remotes, keypads and sensors.
@@ -38,6 +57,7 @@ You can turn on other devices too. These devices are not turned on because they 
 {
     "platforms": [
         {
+            "name": "Lutron",
             "platform": "Lutron",
             "cco": false,
             "dimmers": false,
@@ -46,7 +66,8 @@ You can turn on other devices too. These devices are not turned on because they 
             "remotes": true,
             "shades": false,
             "strips": false,
-            "switches": false
+            "switches": false,
+            "timeclocks": true
         }
     ]
 }

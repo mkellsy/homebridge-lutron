@@ -7,4 +7,5 @@ export const defaults = {
     shades: false,
     strips: false,
     switches: false,
+    timeclocks: true,
 };

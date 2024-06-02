@@ -10,6 +10,7 @@ import { Occupancy } from "./Devices/Occupancy";
 import { Shade } from "./Devices/Shade";
 import { Strip } from "./Devices/Strip";
 import { Switch } from "./Devices/Switch";
+import { Timeclock } from "./Devices/Timeclock";
 
 import { Device } from "./Interfaces/Device";
 
@@ -71,6 +72,13 @@ export abstract class Accessories {
                 }
 
                 return new Switch(homebridge, device, log);
+
+            case DeviceType.Timeclock:
+                if (config.timeclocks === false) {
+                    return undefined;
+                }
+
+                return new Timeclock(homebridge, device, log);
         }
 
         return undefined;
