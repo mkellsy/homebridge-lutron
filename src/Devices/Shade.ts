@@ -42,11 +42,11 @@ export class Shade extends Common implements Device {
         return this.device.status.level || 0;
     };
 
-    private onSetPosition = (value: CharacteristicValue): void => {
+    private onSetPosition = async (value: CharacteristicValue): Promise<void> => {
         const level = (value || 0) as number;
 
         this.log.debug(`Shade Set Position: ${this.device.name} ${level}`);
 
-        this.device.set({ level });
+        await this.device.set({ level });
     };
 }

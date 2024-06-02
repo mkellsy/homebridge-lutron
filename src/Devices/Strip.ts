@@ -57,13 +57,13 @@ export class Strip extends Common implements Device {
         return this.device.status.level || 0;
     };
 
-    private onSetBrightness = (value: CharacteristicValue): void => {
+    private onSetBrightness = async (value: CharacteristicValue): Promise<void> => {
         const level = (value || 0) as number;
         const state = level > 0 ? "On" : "Off";
 
         this.log.debug(`Strip Set Brightness: ${this.device.name} ${value}`);
 
-        this.device.set({ state, level });
+        await this.device.set({ state, level });
     };
 
     private onGetTemperature = (): CharacteristicValue => {
@@ -76,7 +76,7 @@ export class Strip extends Common implements Device {
         return temperature;
     };
 
-    private onSetTemperature = (value: CharacteristicValue): void => {
+    private onSetTemperature = async (value: CharacteristicValue): Promise<void> => {
         const state = this.device.status.state;
         const level = this.device.status.level || 0;
         const temperature = Math.max((value as number) || 140, 140);
@@ -85,6 +85,6 @@ export class Strip extends Common implements Device {
         this.log.debug(`Strip Set Luminance: ${this.device.name} ${luminance}`);
         this.log.debug(`Strip Set Temperature: ${this.device.name} ${temperature}`);
 
-        this.device.set({ state, level, luminance });
+        await this.device.set({ state, level, luminance });
     };
 }

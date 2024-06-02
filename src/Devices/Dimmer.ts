@@ -46,13 +46,13 @@ export class Dimmer extends Common implements Device {
         return this.device.status.level || 0;
     };
 
-    private onSetBrightness = (value: CharacteristicValue): void => {
+    private onSetBrightness = async (value: CharacteristicValue): Promise<void> => {
         const level = (value || 0) as number;
         const state = level > 0 ? "On" : "Off";
 
         this.log.debug(`Dimmer Set State: ${this.device.name} ${state}`);
         this.log.debug(`Dimmer Set Brightness: ${this.device.name} ${level}`);
 
-        this.device.set({ state, level });
+        await this.device.set({ state, level });
     };
 }

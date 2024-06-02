@@ -34,9 +34,9 @@ export class Switch extends Common implements Device {
         return this.device.status.state === "On";
     };
 
-    private onSetState = (value: CharacteristicValue): void => {
+    private onSetState = async (value: CharacteristicValue): Promise<void> => {
         this.log.debug(`Switch set state: ${this.device.name} ${value ? "On" : "Off"}`);
 
-        this.device.set({ state: value ? "On" : "Off" });
+        await this.device.set({ state: value ? "On" : "Off" });
     };
 }

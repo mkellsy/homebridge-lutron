@@ -34,9 +34,9 @@ export class Contact extends Common implements Device {
         return this.device.status.state === "Closed";
     };
 
-    private onSetState = (value: CharacteristicValue): void => {
+    private onSetState = async (value: CharacteristicValue): Promise<void> => {
         this.log.debug(`Contact Set State: ${this.device.name} ${value ? "Closed" : "Open"}`);
 
-        this.device.set({ state: value ? "Closed" : "Open" });
+        await this.device.set({ state: value ? "Closed" : "Open" });
     };
 }
