@@ -22,10 +22,10 @@ After you have a processor or bridge paired, you can start Homebridge.
 
 This pulgin supports most of the devices available in Caseda and RA3. By default, only devices that are not nativally supported are exposed to Homebridge. These devices are exposed to Homebridge by default.
 
-* Pico Remotes (All types are aupported, including 4 button scene remotes)
-* Sunnata Keypads (All types, including both hybrid and non-hybrid)
-* Occupancy Sensors
-* Timeclocks
+-   Pico Remotes (All types are aupported, including 4 button scene remotes)
+-   Sunnata Keypads (All types, including both hybrid and non-hybrid)
+-   Occupancy Sensors
+-   Timeclocks
 
 You can enable the other types via the configuration.
 
