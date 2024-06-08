@@ -30,7 +30,7 @@ export class Strip extends Common implements Device {
 
     public onUpdate(state: DeviceState): void {
         const luminance = Math.max(state.luminance || 1800, 1800);
-        const temperature = Math.floor(((luminance - 1800) / 1200) * 360 + 140);
+        const temperature = Math.floor((((100 - ((luminance * 100) / 1200)) * 100) / 360) + 140);
 
         this.log.debug(`Strip: ${this.device.name} State: ${state.state}`);
         this.log.debug(`Strip: ${this.device.name} Brightness: ${state.level}`);
@@ -65,7 +65,7 @@ export class Strip extends Common implements Device {
 
     private onGetTemperature = (): CharacteristicValue => {
         const luminance = Math.max(this.device.status.luminance || 1800, 1800);
-        const temperature = Math.floor(((luminance - 1800) / 1200) * 360 + 140);
+        const temperature = Math.floor((((100 - ((luminance * 100) / 1200)) * 100) / 360) + 140);
 
         this.log.debug(`Strip Get Luminance: ${this.device.name} ${luminance}`);
         this.log.debug(`Strip Get Temperature: ${this.device.name} ${temperature}`);
@@ -77,7 +77,7 @@ export class Strip extends Common implements Device {
         const state = this.device.status.state;
         const level = this.device.status.level || 0;
         const temperature = Math.max((value as number) || 140, 140);
-        const luminance = Math.floor(((temperature - 140) / 360) * 1200 + 1800);
+        const luminance = Math.floor((((100 - ((100 * (temperature - 140)) / 360)) * 1200) / 100) + 1800);
 
         this.log.debug(`Strip Set Luminance: ${this.device.name} ${luminance}`);
         this.log.debug(`Strip Set Temperature: ${this.device.name} ${temperature}`);
