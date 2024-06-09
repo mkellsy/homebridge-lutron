@@ -7,6 +7,7 @@ import { accessories, devices, platform, plugin } from "./Platform";
 
 import { Contact } from "./Devices/Contact";
 import { Dimmer } from "./Devices/Dimmer";
+import { Fan } from "./Devices/Fan";
 import { Keypad } from "./Devices/Keypad";
 import { Occupancy } from "./Devices/Occupancy";
 import { Shade } from "./Devices/Shade";
@@ -32,6 +33,13 @@ export abstract class Accessories {
                 }
 
                 return new Dimmer(homebridge, device as Leap.Dimmer, log);
+
+            case DeviceType.Fan:
+                if (config.fans === false) {
+                    return undefined;
+                }
+
+                return new Fan(homebridge, device as Leap.Fan, log);
 
             case DeviceType.Keypad:
                 if (config.keypads === false) {
