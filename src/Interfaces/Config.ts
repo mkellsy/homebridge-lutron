@@ -5,7 +5,7 @@ export const defaults = {
     sensors: true,
     remotes: true,
     shades: false,
-    strips: false,
+    strips: true,
     switches: false,
     timeclocks: true,
 };

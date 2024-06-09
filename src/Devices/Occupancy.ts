@@ -1,13 +1,24 @@
+import * as Leap from "@mkellsy/leap-client";
+
 import { API, CharacteristicValue, Logging, Service } from "homebridge";
-import { DeviceState, Occupancy as IOccupancy } from "@mkellsy/hap-device";
 
 import { Common } from "./Common";
 import { Device } from "../Interfaces/Device";
 
-export class Occupancy extends Common implements Device {
+/**
+ * Creates an occupancy sensor device.
+ */
+export class Occupancy extends Common<Leap.Occupancy> implements Device {
     private service: Service;
 
-    constructor(homebridge: API, device: IOccupancy, log: Logging) {
+    /**
+     * Creates an occupancy sensor device.
+     *
+     * @param homebridge A reference to the Homebridge API.
+     * @param device A reference to the discovered device.
+     * @param log A refrence to the Homebridge logger.
+     */
+    constructor(homebridge: API, device: Leap.Occupancy, log: Logging) {
         super(homebridge, device, log);
 
         this.service =
@@ -18,7 +29,12 @@ export class Occupancy extends Common implements Device {
         this.service.getCharacteristic(this.homebridge.hap.Characteristic.OccupancyDetected).onGet(this.onGetState);
     }
 
-    public onUpdate(state: DeviceState): void {
+    /**
+     * Updates Homebridge accessory when an update comes from the device.
+     *
+     * @param state The current occupancy sensor state.
+     */
+    public onUpdate(state: Leap.OccupancyState): void {
         this.log.debug(
             `Occupancy: ${this.device.name} State: ${state.state === "Occupied" ? "Detected" : "Not Detected"}`,
         );
@@ -29,6 +45,11 @@ export class Occupancy extends Common implements Device {
         );
     }
 
+    /**
+     * Fetches the current state when Homebridge asks for it.
+     *
+     * @returns A characteristic value.
+     */
     private onGetState = (): CharacteristicValue => {
         this.log.debug(`Occupancy Get State: ${this.device.name} ${this.device.status.state}`);
 

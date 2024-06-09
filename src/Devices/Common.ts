@@ -3,15 +3,15 @@ import { Device } from "@mkellsy/hap-device";
 
 import { accessories, devices, platform, plugin } from "../Platform";
 
-export abstract class Common {
+export abstract class Common<DEVICE extends Device> {
     public readonly id: string;
     public readonly accessory: PlatformAccessory;
 
     protected readonly log: Logging;
     protected readonly homebridge: API;
-    protected readonly device: Device;
+    protected readonly device: DEVICE;
 
-    constructor(homebridge: API, device: Device, log: Logging) {
+    constructor(homebridge: API, device: DEVICE, log: Logging) {
         this.log = log;
         this.homebridge = homebridge;
         this.device = device;

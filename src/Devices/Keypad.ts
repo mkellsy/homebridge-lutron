@@ -1,13 +1,15 @@
+import * as Leap from "@mkellsy/leap-client";
+
 import { API, Logging, Service } from "homebridge";
-import { Action, Button, Keypad as IKeypad } from "@mkellsy/hap-device";
+import { Action, Button } from "@mkellsy/hap-device";
 
 import { Common } from "./Common";
 import { Device } from "../Interfaces/Device";
 
-export class Keypad extends Common implements Device {
+export class Keypad extends Common<Leap.Keypad> implements Device {
     private services: Map<string, Service> = new Map();
 
-    constructor(homebridge: API, device: IKeypad, log: Logging) {
+    constructor(homebridge: API, device: Leap.Keypad, log: Logging) {
         super(homebridge, device, log);
 
         const labelService =

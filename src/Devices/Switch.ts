@@ -1,13 +1,24 @@
+import * as Leap from "@mkellsy/leap-client";
+
 import { API, CharacteristicValue, Logging, Service } from "homebridge";
-import { DeviceState, Switch as ISwitch } from "@mkellsy/hap-device";
 
 import { Common } from "./Common";
 import { Device } from "../Interfaces/Device";
 
-export class Switch extends Common implements Device {
+/**
+ * Creates a switch device.
+ */
+export class Switch extends Common<Leap.Switch> implements Device {
     private service: Service;
 
-    constructor(homebridge: API, device: ISwitch, log: Logging) {
+    /**
+     * Creates a switch device.
+     *
+     * @param homebridge A reference to the Homebridge API.
+     * @param device A reference to the discovered device.
+     * @param log A refrence to the Homebridge logger.
+     */
+    constructor(homebridge: API, device: Leap.Switch, log: Logging) {
         super(homebridge, device, log);
 
         this.service =
@@ -22,21 +33,38 @@ export class Switch extends Common implements Device {
             .onSet(this.onSetState);
     }
 
-    public onUpdate(state: DeviceState): void {
+    /**
+     * Updates Homebridge accessory when an update comes from the device.
+     *
+     * @param state The current switch state.
+     */
+    public onUpdate(state: Leap.SwitchState): void {
         this.log.debug(`Switch: ${this.device.name} state: ${state.state}`);
 
         this.service.updateCharacteristic(this.homebridge.hap.Characteristic.On, state.state === "On");
     }
 
+    /**
+     * Fetches the current state when Homebridge asks for it.
+     *
+     * @returns A characteristic value.
+     */
     private onGetState = (): CharacteristicValue => {
-        this.log.debug(`Switch get state: ${this.device.name} ${this.device.status.state}`);
+        this.log.debug(`Switch Get State: ${this.device.name} ${this.device.status.state}`);
 
         return this.device.status.state === "On";
     };
 
+    /**
+     * Updates the device when a change comes in from Homebridge.
+     */
     private onSetState = async (value: CharacteristicValue): Promise<void> => {
-        this.log.debug(`Switch set state: ${this.device.name} ${value ? "On" : "Off"}`);
+        const state = value ? "On" : "Off";
 
-        await this.device.set({ state: value ? "On" : "Off" });
+        if (this.device.status.state !== state) {
+            this.log.debug(`Switch Set State: ${this.device.name} ${state}`);
+
+            await this.device.set({ state });
+        }
     };
 }

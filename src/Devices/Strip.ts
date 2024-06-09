@@ -1,13 +1,14 @@
+import * as Leap from "@mkellsy/leap-client";
+
 import { API, CharacteristicValue, Logging, Service } from "homebridge";
-import { DeviceState, Strip as IStrip } from "@mkellsy/hap-device";
 
 import { Common } from "./Common";
 import { Device } from "../Interfaces/Device";
 
-export class Strip extends Common implements Device {
+export class Strip extends Common<Leap.Strip> implements Device {
     private service: Service;
 
-    constructor(homebridge: API, device: IStrip, log: Logging) {
+    constructor(homebridge: API, device: Leap.Strip, log: Logging) {
         super(homebridge, device, log);
 
         this.service =
@@ -32,13 +33,12 @@ export class Strip extends Common implements Device {
             .onSet(this.onSetTemperature);
     }
 
-    public onUpdate(state: DeviceState): void {
-        const luminance = Math.max(state.luminance || 1800, 1800);
-        const temperature = this.transformRange(luminance, [1800, 3000], [140, 500], true);
+    public onUpdate(state: Leap.StripState): void {
+        const temperature = this.transformRange(state.luminance, [1800, 3000], [140, 500], true);
 
         this.log.debug(`Strip: ${this.device.name} State: ${state.state}`);
         this.log.debug(`Strip: ${this.device.name} Brightness: ${state.level}`);
-        this.log.debug(`Strip: ${this.device.name} Luminance: ${luminance}`);
+        this.log.debug(`Strip: ${this.device.name} Luminance: ${state.luminance}`);
         this.log.debug(`Strip: ${this.device.name} Temperature: ${temperature}`);
 
         this.service.updateCharacteristic(this.homebridge.hap.Characteristic.On, state.state === "On");
@@ -60,7 +60,7 @@ export class Strip extends Common implements Device {
             this.log.debug(`Strip Set State: ${this.device.name} ${state}`);
             this.log.debug(`Strip Set Brightness: ${this.device.name} ${level}`);
 
-            await this.device.set({ state, level });
+            await this.device.set({ state, level, luminance: this.device.status.luminance });
         }
     };
 
@@ -76,29 +76,29 @@ export class Strip extends Common implements Device {
 
         this.log.debug(`Strip Set Brightness: ${this.device.name} ${value}`);
 
-        await this.device.set({ state, level });
+        await this.device.set({ state, level, luminance: this.device.status.luminance });
     };
 
     private onGetTemperature = (): CharacteristicValue => {
-        const luminance = Math.max(this.device.status.luminance || 1800, 1800);
-        const temperature = this.transformRange(luminance, [1800, 3000], [140, 500], true);
+        const temperature = this.transformRange(this.device.status.luminance, [1800, 3000], [140, 500], true);
 
-        this.log.debug(`Strip Get Luminance: ${this.device.name} ${luminance}`);
+        this.log.debug(`Strip Get Luminance: ${this.device.name} ${this.device.status.luminance}`);
         this.log.debug(`Strip Get Temperature: ${this.device.name} ${temperature}`);
 
         return temperature;
     };
 
     private onSetTemperature = async (value: CharacteristicValue): Promise<void> => {
-        const state = this.device.status.state;
-        const level = this.device.status.level || 0;
-        const temperature = Math.max((value as number) || 140, 140);
-        const luminance = this.transformRange(temperature, [140, 500], [1800, 3000], true);
+        const luminance = this.transformRange(value as number, [140, 500], [1800, 3000], true);
 
         this.log.debug(`Strip Set Luminance: ${this.device.name} ${luminance}`);
-        this.log.debug(`Strip Set Temperature: ${this.device.name} ${temperature}`);
+        this.log.debug(`Strip Set Temperature: ${this.device.name} ${value}`);
 
-        await this.device.set({ state, level, luminance });
+        await this.device.set({
+            state: this.device.status.state || "Off",
+            level: this.device.status.level || 0,
+            luminance,
+        });
     };
 
     private transformRange(value: number, source: number[], destination: number[], negate: boolean) {

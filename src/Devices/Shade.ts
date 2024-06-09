@@ -1,13 +1,14 @@
+import * as Leap from "@mkellsy/leap-client";
+
 import { API, CharacteristicValue, Logging, Service } from "homebridge";
-import { DeviceState, Shade as IShade } from "@mkellsy/hap-device";
 
 import { Common } from "./Common";
 import { Device } from "../Interfaces/Device";
 
-export class Shade extends Common implements Device {
+export class Shade extends Common<Leap.Shade> implements Device {
     private service: Service;
 
-    constructor(homebridge: API, device: IShade, log: Logging) {
+    constructor(homebridge: API, device: Leap.Shade, log: Logging) {
         super(homebridge, device, log);
 
         this.service =
@@ -24,7 +25,7 @@ export class Shade extends Common implements Device {
             .onSet(this.onSetPosition);
     }
 
-    public onUpdate(state: DeviceState): void {
+    public onUpdate(state: Leap.ShadeState): void {
         this.log.debug(`Shade: ${this.device.name} Position: ${state.level}`);
 
         this.service.updateCharacteristic(this.homebridge.hap.Characteristic.TargetPosition, state.level || 0);
@@ -42,9 +43,10 @@ export class Shade extends Common implements Device {
 
     private onSetPosition = async (value: CharacteristicValue): Promise<void> => {
         const level = (value || 0) as number;
+        const state = level > 0 ? "Open" : "Closed";
 
         this.log.debug(`Shade Set Position: ${this.device.name} ${level}`);
 
-        await this.device.set({ level });
+        await this.device.set({ state, level });
     };
 }

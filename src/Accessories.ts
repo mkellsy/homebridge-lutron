@@ -1,5 +1,7 @@
+import * as Leap from "@mkellsy/leap-client";
+
 import { API, Logging, PlatformConfig } from "homebridge";
-import { DeviceType, Device as IDevice, Keypad as IKeypad } from "@mkellsy/hap-device";
+import { DeviceType, Device as IDevice } from "@mkellsy/hap-device";
 
 import { accessories, devices, platform, plugin } from "./Platform";
 
@@ -22,63 +24,63 @@ export abstract class Accessories {
                     return undefined;
                 }
 
-                return new Contact(homebridge, device, log);
+                return new Contact(homebridge, device as Leap.Contact, log);
 
             case DeviceType.Dimmer:
                 if (config.dimmers === false) {
                     return undefined;
                 }
 
-                return new Dimmer(homebridge, device, log);
+                return new Dimmer(homebridge, device as Leap.Dimmer, log);
 
             case DeviceType.Keypad:
                 if (config.keypads === false) {
                     return undefined;
                 }
 
-                return new Keypad(homebridge, device as IKeypad, log);
+                return new Keypad(homebridge, device as Leap.Keypad, log);
 
             case DeviceType.Occupancy:
                 if (config.sensors === false) {
                     return undefined;
                 }
 
-                return new Occupancy(homebridge, device, log);
+                return new Occupancy(homebridge, device as Leap.Occupancy, log);
 
             case DeviceType.Remote:
                 if (config.remotes === false) {
                     return undefined;
                 }
 
-                return new Keypad(homebridge, device as IKeypad, log);
+                return new Keypad(homebridge, device as Leap.Keypad, log);
 
             case DeviceType.Shade:
                 if (config.shades === false) {
                     return undefined;
                 }
 
-                return new Shade(homebridge, device, log);
+                return new Shade(homebridge, device as Leap.Shade, log);
 
             case DeviceType.Strip:
                 if (config.strips === false) {
                     return undefined;
                 }
 
-                return new Strip(homebridge, device, log);
+                return new Strip(homebridge, device as Leap.Strip, log);
 
             case DeviceType.Switch:
                 if (config.switches === false) {
                     return undefined;
                 }
 
-                return new Switch(homebridge, device, log);
+                return new Switch(homebridge, device as Leap.Switch, log);
 
             case DeviceType.Timeclock:
                 if (config.timeclocks === false) {
                     return undefined;
                 }
 
-                return new Timeclock(homebridge, device, log);
+                return new Timeclock(homebridge, device as Leap.Timeclock, log);
         }
 
         return undefined;

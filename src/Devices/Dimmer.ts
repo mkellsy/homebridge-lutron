@@ -1,13 +1,14 @@
+import * as Leap from "@mkellsy/leap-client";
+
 import { API, CharacteristicValue, Logging, Service } from "homebridge";
-import { DeviceState, Dimmer as IDimmer } from "@mkellsy/hap-device";
 
 import { Common } from "./Common";
 import { Device } from "../Interfaces/Device";
 
-export class Dimmer extends Common implements Device {
+export class Dimmer extends Common<Leap.Dimmer> implements Device {
     private service: Service;
 
-    constructor(homebridge: API, device: IDimmer, log: Logging) {
+    constructor(homebridge: API, device: Leap.Dimmer, log: Logging) {
         super(homebridge, device, log);
 
         this.service =
@@ -27,7 +28,7 @@ export class Dimmer extends Common implements Device {
             .onSet(this.onSetBrightness);
     }
 
-    public onUpdate(state: DeviceState): void {
+    public onUpdate(state: Leap.DimmerState): void {
         this.log.debug(`Dimmer: ${this.device.name} State: ${state.state}`);
         this.log.debug(`Dimmer: ${this.device.name} Brightness: ${state.level || 0}`);
 

@@ -1,13 +1,14 @@
+import * as Leap from "@mkellsy/leap-client";
+
 import { API, CharacteristicValue, Logging, Service } from "homebridge";
-import { DeviceState, Contact as IContact } from "@mkellsy/hap-device";
 
 import { Common } from "./Common";
 import { Device } from "../Interfaces/Device";
 
-export class Contact extends Common implements Device {
+export class Contact extends Common<Leap.Contact> implements Device {
     private service: Service;
 
-    constructor(homebridge: API, device: IContact, log: Logging) {
+    constructor(homebridge: API, device: Leap.Contact, log: Logging) {
         super(homebridge, device, log);
 
         this.service =
@@ -22,7 +23,7 @@ export class Contact extends Common implements Device {
             .onSet(this.onSetState);
     }
 
-    public onUpdate(state: DeviceState): void {
+    public onUpdate(state: Leap.ContactState): void {
         this.log.debug(`Contact: ${this.device.name} State: ${state.state}`);
 
         this.service.updateCharacteristic(this.homebridge.hap.Characteristic.On, state.state === "Closed");
