@@ -67,7 +67,7 @@ export class Fan extends Common<Leap.Fan> implements Device {
     /**
      * Updates the device when a change comes in from Homebridge.
      */
-    private onSetState = async (value: CharacteristicValue): Promise<void> => {
+    private onSetState = (value: CharacteristicValue): void => {
         const state = value ? "On" : "Off";
         const speed = value ? 7 : 0;
 
@@ -75,7 +75,7 @@ export class Fan extends Common<Leap.Fan> implements Device {
             this.log.debug(`Fan Set State: ${this.device.name} ${state}`);
             this.log.debug(`Fan Set Speed: ${this.device.name} ${speed}`);
 
-            await this.device.set({ state, speed });
+            this.device.set({ state, speed }).catch((error) => this.log.error(error));
         }
     };
 
@@ -95,7 +95,7 @@ export class Fan extends Common<Leap.Fan> implements Device {
     /**
      * Updates the device speed when a change comes in from Homebridge.
      */
-    private onSetSpeed = async (value: CharacteristicValue): Promise<void> => {
+    private onSetSpeed = (value: CharacteristicValue): void => {
         const speed = Math.round((((value as number) || 0) / 100) * 7);
         const state = speed > 0 ? "On" : "Off";
 
@@ -103,7 +103,7 @@ export class Fan extends Common<Leap.Fan> implements Device {
             this.log.debug(`Fan Set State: ${this.device.name} ${state}`);
             this.log.debug(`Fan Set Speed: ${this.device.name} ${speed}`);
 
-            await this.device.set({ state, speed });
+            this.device.set({ state, speed }).catch((error) => this.log.error(error));
         }
     };
 }

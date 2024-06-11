@@ -35,9 +35,9 @@ export class Contact extends Common<Leap.Contact> implements Device {
         return this.device.status.state === "Closed";
     };
 
-    private onSetState = async (value: CharacteristicValue): Promise<void> => {
+    private onSetState = (value: CharacteristicValue): void => {
         this.log.debug(`Contact Set State: ${this.device.name} ${value ? "Closed" : "Open"}`);
 
-        await this.device.set({ state: value ? "Closed" : "Open" });
+        this.device.set({ state: value ? "Closed" : "Open" }).catch((error) => this.log.error(error));
     };
 }

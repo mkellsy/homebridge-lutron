@@ -41,12 +41,12 @@ export class Shade extends Common<Leap.Shade> implements Device {
         return this.device.status.level || 0;
     };
 
-    private onSetPosition = async (value: CharacteristicValue): Promise<void> => {
+    private onSetPosition = (value: CharacteristicValue): void => {
         const level = (value || 0) as number;
         const state = level > 0 ? "Open" : "Closed";
 
         this.log.debug(`Shade Set Position: ${this.device.name} ${level}`);
 
-        await this.device.set({ state, level });
+        this.device.set({ state, level }).catch((error) => this.log.error(error));
     };
 }

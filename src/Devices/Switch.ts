@@ -58,13 +58,13 @@ export class Switch extends Common<Leap.Switch> implements Device {
     /**
      * Updates the device when a change comes in from Homebridge.
      */
-    private onSetState = async (value: CharacteristicValue): Promise<void> => {
+    private onSetState = (value: CharacteristicValue): void => {
         const state = value ? "On" : "Off";
 
         if (this.device.status.state !== state) {
             this.log.debug(`Switch Set State: ${this.device.name} ${state}`);
 
-            await this.device.set({ state });
+            this.device.set({ state }).catch((error) => this.log.error(error));
         }
     };
 }

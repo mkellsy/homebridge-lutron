@@ -52,7 +52,7 @@ export class Strip extends Common<Leap.Strip> implements Device {
         return this.device.status.state === "On";
     };
 
-    private onSetState = async (value: CharacteristicValue): Promise<void> => {
+    private onSetState = (value: CharacteristicValue): void => {
         const state = value ? "On" : "Off";
         const level = value ? 100 : 0;
 
@@ -60,7 +60,9 @@ export class Strip extends Common<Leap.Strip> implements Device {
             this.log.debug(`Strip Set State: ${this.device.name} ${state}`);
             this.log.debug(`Strip Set Brightness: ${this.device.name} ${level}`);
 
-            await this.device.set({ state, level, luminance: this.device.status.luminance });
+            this.device
+                .set({ state, level, luminance: this.device.status.luminance })
+                .catch((error) => this.log.error(error));
         }
     };
 
@@ -70,13 +72,15 @@ export class Strip extends Common<Leap.Strip> implements Device {
         return this.device.status.level || 0;
     };
 
-    private onSetBrightness = async (value: CharacteristicValue): Promise<void> => {
+    private onSetBrightness = (value: CharacteristicValue): void => {
         const level = (value || 0) as number;
         const state = level > 0 ? "On" : "Off";
 
         this.log.debug(`Strip Set Brightness: ${this.device.name} ${value}`);
 
-        await this.device.set({ state, level, luminance: this.device.status.luminance });
+        this.device
+            .set({ state, level, luminance: this.device.status.luminance })
+            .catch((error) => this.log.error(error));
     };
 
     private onGetTemperature = (): CharacteristicValue => {
@@ -88,17 +92,19 @@ export class Strip extends Common<Leap.Strip> implements Device {
         return temperature;
     };
 
-    private onSetTemperature = async (value: CharacteristicValue): Promise<void> => {
+    private onSetTemperature = (value: CharacteristicValue): void => {
         const luminance = this.transformRange(value as number, [140, 500], [1800, 3000], true);
 
         this.log.debug(`Strip Set Luminance: ${this.device.name} ${luminance}`);
         this.log.debug(`Strip Set Temperature: ${this.device.name} ${value}`);
 
-        await this.device.set({
-            state: this.device.status.state || "Off",
-            level: this.device.status.level || 0,
-            luminance,
-        });
+        this.device
+            .set({
+                state: this.device.status.state || "Off",
+                level: this.device.status.level || 0,
+                luminance,
+            })
+            .catch((error) => this.log.error(error));
     };
 
     private transformRange(value: number, source: number[], destination: number[], negate: boolean) {

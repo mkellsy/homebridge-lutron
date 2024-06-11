@@ -42,7 +42,7 @@ export class Dimmer extends Common<Leap.Dimmer> implements Device {
         return this.device.status.state === "On";
     };
 
-    private onSetState = async (value: CharacteristicValue): Promise<void> => {
+    private onSetState = (value: CharacteristicValue): void => {
         const state = value ? "On" : "Off";
         const level = value ? 100 : 0;
 
@@ -50,7 +50,7 @@ export class Dimmer extends Common<Leap.Dimmer> implements Device {
             this.log.debug(`Dimmer Set State: ${this.device.name} ${state}`);
             this.log.debug(`Dimmer Set Brightness: ${this.device.name} ${level}`);
 
-            await this.device.set({ state, level });
+            this.device.set({ state, level }).catch((error) => this.log.error(error));
         }
     };
 
@@ -60,13 +60,13 @@ export class Dimmer extends Common<Leap.Dimmer> implements Device {
         return this.device.status.level || 0;
     };
 
-    private onSetBrightness = async (value: CharacteristicValue): Promise<void> => {
+    private onSetBrightness = (value: CharacteristicValue): void => {
         const level = (value || 0) as number;
         const state = level > 0 ? "On" : "Off";
 
         this.log.debug(`Dimmer Set State: ${this.device.name} ${state}`);
         this.log.debug(`Dimmer Set Brightness: ${this.device.name} ${level}`);
 
-        await this.device.set({ state, level });
+        this.device.set({ state, level }).catch((error) => this.log.error(error));
     };
 }
