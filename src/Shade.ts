@@ -21,7 +21,7 @@ export class Shade extends Common<Leap.Shade> implements Device {
      */
     constructor(homebridge: API, device: Leap.Shade, log: Logging) {
         super(homebridge, device, log);
-
+        console.log("1");
         this.service =
             this.accessory.getService(this.homebridge.hap.Service.WindowCovering) ||
             this.accessory.addService(this.homebridge.hap.Service.WindowCovering, this.device.name);
@@ -72,12 +72,12 @@ export class Shade extends Common<Leap.Shade> implements Device {
      *
      * @param value The characteristic value from Homebrtidge.
      */
-    private onSetPosition = (value: CharacteristicValue): void => {
+    private onSetPosition = async (value: CharacteristicValue): Promise<void> => {
         const level = (value || 0) as number;
         const state = level > 0 ? "Open" : "Closed";
 
         this.log.debug(`Shade Set Position: ${this.device.name} ${level}`);
 
-        this.device.set({ state, level }).catch((error) => this.log.error(error));
+        await this.device.set({ state, level });
     };
 }

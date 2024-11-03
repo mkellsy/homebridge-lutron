@@ -47,9 +47,10 @@
         "lutron": "bin/lutron"
     },
     "scripts": {
-        "build": "npm run format && npm run lint && node ./build",
+        "build": "npm run format && npm run lint && npm run test && node ./build",
         "lint": "eslint ./src/*.ts",
         "format": "prettier --write .",
+        "test": "nyc mocha test/*.test.ts test/**/*.test.ts",
         "watch": "npm run build && npm link && nodemon",
         "pair": "npm run build && node ./bin/lutron -d pair",
         "prepublishOnly": "npm run build"

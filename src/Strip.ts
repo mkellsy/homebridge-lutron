@@ -50,7 +50,7 @@ export class Strip extends Common<Leap.Strip> implements Device {
      * @param state The current dimmer state.
      */
     public onUpdate(state: Leap.StripState): void {
-        const temperature = this.transformRange(state.luminance, [1800, 3000], [140, 500], true);
+        const temperature = this.transformRange(state.luminance, [1800, 3000], [140, 500]);
 
         this.log.debug(`Strip: ${this.device.name} State: ${state.state}`);
         this.log.debug(`Strip: ${this.device.name} Brightness: ${state.level}`);
@@ -78,7 +78,7 @@ export class Strip extends Common<Leap.Strip> implements Device {
      *
      * @param value The characteristic value from Homebrtidge.
      */
-    private onSetState = (value: CharacteristicValue): void => {
+    private onSetState = async (value: CharacteristicValue): Promise<void> => {
         const state = value ? "On" : "Off";
         const level = value ? 100 : 0;
 
@@ -86,9 +86,7 @@ export class Strip extends Common<Leap.Strip> implements Device {
             this.log.debug(`Strip Set State: ${this.device.name} ${state}`);
             this.log.debug(`Strip Set Brightness: ${this.device.name} ${level}`);
 
-            this.device
-                .set({ state, level, luminance: this.device.status.luminance })
-                .catch((error) => this.log.error(error));
+            await this.device.set({ state, level, luminance: this.device.status.luminance });
         }
     };
 
@@ -108,15 +106,13 @@ export class Strip extends Common<Leap.Strip> implements Device {
      *
      * @param value The characteristic value from Homebrtidge.
      */
-    private onSetBrightness = (value: CharacteristicValue): void => {
+    private onSetBrightness = async (value: CharacteristicValue): Promise<void> => {
         const level = (value || 0) as number;
         const state = level > 0 ? "On" : "Off";
 
         this.log.debug(`Strip Set Brightness: ${this.device.name} ${value}`);
 
-        this.device
-            .set({ state, level, luminance: this.device.status.luminance })
-            .catch((error) => this.log.error(error));
+        await this.device.set({ state, level, luminance: this.device.status.luminance });
     };
 
     /**
@@ -125,7 +121,7 @@ export class Strip extends Common<Leap.Strip> implements Device {
      * @returns A characteristic value.
      */
     private onGetTemperature = (): CharacteristicValue => {
-        const temperature = this.transformRange(this.device.status.luminance, [1800, 3000], [140, 500], true);
+        const temperature = this.transformRange(this.device.status.luminance, [1800, 3000], [140, 500]);
 
         this.log.debug(`Strip Get Luminance: ${this.device.name} ${this.device.status.luminance}`);
         this.log.debug(`Strip Get Temperature: ${this.device.name} ${temperature}`);
@@ -138,29 +134,27 @@ export class Strip extends Common<Leap.Strip> implements Device {
      *
      * @param value The characteristic value from Homebrtidge.
      */
-    private onSetTemperature = (value: CharacteristicValue): void => {
-        const luminance = this.transformRange(value as number, [140, 500], [1800, 3000], true);
+    private onSetTemperature = async (value: CharacteristicValue): Promise<void> => {
+        const luminance = this.transformRange(value as number, [140, 500], [1800, 3000]);
 
         this.log.debug(`Strip Set Luminance: ${this.device.name} ${luminance}`);
         this.log.debug(`Strip Set Temperature: ${this.device.name} ${value}`);
 
-        this.device
-            .set({
-                state: this.device.status.state || "Off",
-                level: this.device.status.level || 0,
-                luminance,
-            })
-            .catch((error) => this.log.error(error));
+        await this.device.set({
+            state: this.device.status.state,
+            level: this.device.status.level,
+            luminance,
+        });
     };
 
     /*
      * Transforms HomeKit color temprature to kelvin used by Lutron.
      */
-    private transformRange(value: number, source: number[], destination: number[], negate: boolean) {
+    private transformRange(value: number, source: number[], destination: number[]) {
         const base = Math.min(Math.max(value, source[0]), source[1]) - source[0];
         const percentage = (base * 100) / (source[1] - source[0]);
 
-        const delta = (((negate ? 100 : 0) - percentage) * (destination[1] - destination[0])) / 100;
+        const delta = ((100 - percentage) * (destination[1] - destination[0])) / 100;
         const result = Math.floor(delta + destination[0]);
 
         return Math.min(Math.max(result, destination[0]), destination[1]);

@@ -61,13 +61,13 @@ export class Switch extends Common<Leap.Switch> implements Device {
      *
      * @param value The characteristic value from Homebrtidge.
      */
-    private onSetState = (value: CharacteristicValue): void => {
+    private onSetState = async (value: CharacteristicValue): Promise<void> => {
         const state = value ? "On" : "Off";
 
         if (this.device.status.state !== state) {
             this.log.debug(`Switch Set State: ${this.device.name} ${state}`);
 
-            this.device.set({ state }).catch((error) => this.log.error(error));
+            await this.device.set({ state });
         }
     };
 }
