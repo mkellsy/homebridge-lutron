@@ -25,7 +25,10 @@ const options = {
 
 log.info(`authority ${colors.cyan(path.resolve(__dirname, "authority"))}`);
 
-fs.copyFileSync(path.resolve(__dirname, "node_modules/@mkellsy/leap/authority"), path.resolve(__dirname, "authority"));
+fs.copyFileSync(
+    path.resolve(__dirname, "node_modules/@mkellsy/leap-client/authority"),
+    path.resolve(__dirname, "authority"),
+);
 
 const tasks = [
     { input: path.resolve(__dirname, "src/index.ts"), output: path.resolve(__dirname, "lib/index.js") },
