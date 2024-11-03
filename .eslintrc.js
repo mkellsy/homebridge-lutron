@@ -11,6 +11,7 @@ module.exports = {
         "jsdoc/check-param-names": 0,
         "jsdoc/no-undefined-types": 0,
         "jsdoc/require-description": 1,
+        "jsdoc/check-tag-names": 0,
     },
     overrides: [
         {

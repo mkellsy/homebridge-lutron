@@ -7,8 +7,14 @@ import { program } from "commander";
 
 const log = Logger.log;
 
+/*
+ * Adds the debug option to the CLI.
+ */
 program.option("-d, --debug", "enable debug logging");
 
+/*
+ * Defines the pairing tool in the CLI.
+ */
 program.command("pair").action(() => {
     Logger.configure(program);
 
@@ -20,6 +26,12 @@ program.command("pair").action(() => {
         .finally(() => process.exit(0));
 });
 
+/**
+ * Exports the CLI main entry point.
+ *
+ * @param args (optional) A reference to the command line arguments.
+ * @public
+ */
 export = function main(args?: string[] | undefined): void {
     program.parse(args || process.argv);
 };

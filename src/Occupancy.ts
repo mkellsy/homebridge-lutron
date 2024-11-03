@@ -3,10 +3,11 @@ import * as Leap from "@mkellsy/leap-client";
 import { API, CharacteristicValue, Logging, Service } from "homebridge";
 
 import { Common } from "./Common";
-import { Device } from "../Interfaces/Device";
+import { Device } from "./Device";
 
 /**
  * Creates an occupancy sensor device.
+ * @private
  */
 export class Occupancy extends Common<Leap.Occupancy> implements Device {
     private service: Service;

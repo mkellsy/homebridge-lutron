@@ -75,4 +75,4 @@ You can turn on other devices too. These devices are not turned on because they 
 
 ## Support
 
-I offer not support for this plugin, it is published only for personal use.
+I offer no support for this plugin, it is published only for personal use.

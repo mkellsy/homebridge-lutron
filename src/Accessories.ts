@@ -5,19 +5,33 @@ import { DeviceType, Device as IDevice } from "@mkellsy/hap-device";
 
 import { accessories, devices, platform, plugin } from "./Platform";
 
-import { Contact } from "./Devices/Contact";
-import { Dimmer } from "./Devices/Dimmer";
-import { Fan } from "./Devices/Fan";
-import { Keypad } from "./Devices/Keypad";
-import { Occupancy } from "./Devices/Occupancy";
-import { Shade } from "./Devices/Shade";
-import { Strip } from "./Devices/Strip";
-import { Switch } from "./Devices/Switch";
-import { Timeclock } from "./Devices/Timeclock";
+import { Contact } from "./Contact";
+import { Dimmer } from "./Dimmer";
+import { Fan } from "./Fan";
+import { Keypad } from "./Keypad";
+import { Occupancy } from "./Occupancy";
+import { Shade } from "./Shade";
+import { Strip } from "./Strip";
+import { Switch } from "./Switch";
+import { Timeclock } from "./Timeclock";
 
-import { Device } from "./Interfaces/Device";
+import { Device } from "./Device";
 
+/**
+ * Accessory factory.
+ * @private
+ */
 export abstract class Accessories {
+    /**
+     * Creates respective devices from a common device discovery.
+     *
+     * @param homebridge A reference to the Homebridge API.
+     * @param device A reference to the common device object.
+     * @param config A reference to the plugin configuration.
+     * @param log A reference to the Homebridge logger.
+     *
+     * @returns A device or undefined if not configured.
+     */
     public static create(homebridge: API, device: IDevice, config: PlatformConfig, log: Logging): Device | undefined {
         switch (device.type) {
             case DeviceType.Contact:
@@ -94,12 +108,26 @@ export abstract class Accessories {
         return undefined;
     }
 
+    /**
+     * Fetches an internally cached device.
+     *
+     * @param homebridge A reference to the Homebridge API.
+     * @param device A reference to the common device object.
+     *
+     * @returns The cached device or undefined if not available.
+     */
     public static get(homebridge: API, device: IDevice): Device | undefined {
         const id = homebridge.hap.uuid.generate(device.id);
 
         return devices.get(id);
     }
 
+    /**
+     * Removes an internally cached device.
+     *
+     * @param homebridge A reference to the Homebridge API.
+     * @param device A reference to the common device object.
+     */
     public static remove(homebridge: API, device: IDevice): void {
         const id = homebridge.hap.uuid.generate(device.id);
         const accessory = accessories.get(id);

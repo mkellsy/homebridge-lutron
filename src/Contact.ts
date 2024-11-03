@@ -3,22 +3,23 @@ import * as Leap from "@mkellsy/leap-client";
 import { API, CharacteristicValue, Logging, Service } from "homebridge";
 
 import { Common } from "./Common";
-import { Device } from "../Interfaces/Device";
+import { Device } from "./Device";
 
 /**
- * Creates a switch device.
+ * Creates a CCO device.
+ * @private
  */
-export class Switch extends Common<Leap.Switch> implements Device {
+export class Contact extends Common<Leap.Contact> implements Device {
     private service: Service;
 
     /**
-     * Creates a switch device.
+     * Creates a CCO device.
      *
      * @param homebridge A reference to the Homebridge API.
      * @param device A reference to the discovered device.
      * @param log A refrence to the Homebridge logger.
      */
-    constructor(homebridge: API, device: Leap.Switch, log: Logging) {
+    constructor(homebridge: API, device: Leap.Contact, log: Logging) {
         super(homebridge, device, log);
 
         this.service =
@@ -36,12 +37,12 @@ export class Switch extends Common<Leap.Switch> implements Device {
     /**
      * Updates Homebridge accessory when an update comes from the device.
      *
-     * @param state The current switch state.
+     * @param state The current dimmer state.
      */
-    public onUpdate(state: Leap.SwitchState): void {
-        this.log.debug(`Switch: ${this.device.name} state: ${state.state}`);
+    public onUpdate(state: Leap.ContactState): void {
+        this.log.debug(`Contact: ${this.device.name} State: ${state.state}`);
 
-        this.service.updateCharacteristic(this.homebridge.hap.Characteristic.On, state.state === "On");
+        this.service.updateCharacteristic(this.homebridge.hap.Characteristic.On, state.state === "Closed");
     }
 
     /**
@@ -50,21 +51,19 @@ export class Switch extends Common<Leap.Switch> implements Device {
      * @returns A characteristic value.
      */
     private onGetState = (): CharacteristicValue => {
-        this.log.debug(`Switch Get State: ${this.device.name} ${this.device.status.state}`);
+        this.log.debug(`Contact Get State: ${this.device.name} ${this.device.status.state}`);
 
-        return this.device.status.state === "On";
+        return this.device.status.state === "Closed";
     };
 
     /**
      * Updates the device when a change comes in from Homebridge.
+     *
+     * @param value The characteristic value from Homebrtidge.
      */
     private onSetState = (value: CharacteristicValue): void => {
-        const state = value ? "On" : "Off";
+        this.log.debug(`Contact Set State: ${this.device.name} ${value ? "Closed" : "Open"}`);
 
-        if (this.device.status.state !== state) {
-            this.log.debug(`Switch Set State: ${this.device.name} ${state}`);
-
-            this.device.set({ state }).catch((error) => this.log.error(error));
-        }
+        this.device.set({ state: value ? "Closed" : "Open" }).catch((error) => this.log.error(error));
     };
 }

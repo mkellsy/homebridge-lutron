@@ -3,11 +3,22 @@ import * as Leap from "@mkellsy/leap-client";
 import { API, CharacteristicValue, Logging, Service } from "homebridge";
 
 import { Common } from "./Common";
-import { Device } from "../Interfaces/Device";
+import { Device } from "./Device";
 
+/**
+ * Creates a light strip device.
+ * @private
+ */
 export class Strip extends Common<Leap.Strip> implements Device {
     private service: Service;
 
+    /**
+     * Creates a light strip device.
+     *
+     * @param homebridge A reference to the Homebridge API.
+     * @param device A reference to the discovered device.
+     * @param log A refrence to the Homebridge logger.
+     */
     constructor(homebridge: API, device: Leap.Strip, log: Logging) {
         super(homebridge, device, log);
 
@@ -33,6 +44,11 @@ export class Strip extends Common<Leap.Strip> implements Device {
             .onSet(this.onSetTemperature);
     }
 
+    /**
+     * Updates Homebridge accessory when an update comes from the device.
+     *
+     * @param state The current dimmer state.
+     */
     public onUpdate(state: Leap.StripState): void {
         const temperature = this.transformRange(state.luminance, [1800, 3000], [140, 500], true);
 
@@ -46,12 +62,22 @@ export class Strip extends Common<Leap.Strip> implements Device {
         this.service.updateCharacteristic(this.homebridge.hap.Characteristic.ColorTemperature, temperature);
     }
 
+    /**
+     * Fetches the current state when Homebridge asks for it.
+     *
+     * @returns A characteristic value.
+     */
     private onGetState = (): CharacteristicValue => {
         this.log.debug(`Strip Get State: ${this.device.name} ${this.device.status.state}`);
 
         return this.device.status.state === "On";
     };
 
+    /**
+     * Updates the device when a change comes in from Homebridge.
+     *
+     * @param value The characteristic value from Homebrtidge.
+     */
     private onSetState = (value: CharacteristicValue): void => {
         const state = value ? "On" : "Off";
         const level = value ? 100 : 0;
@@ -66,12 +92,22 @@ export class Strip extends Common<Leap.Strip> implements Device {
         }
     };
 
+    /**
+     * Fetches the current brightness when Homebridge asks for it.
+     *
+     * @returns A characteristic value.
+     */
     private onGetBrightness = (): CharacteristicValue => {
         this.log.debug(`Strip Get Brightness: ${this.device.name} ${this.device.status.level || 0}`);
 
         return this.device.status.level || 0;
     };
 
+    /**
+     * Updates the device when a change comes in from Homebridge.
+     *
+     * @param value The characteristic value from Homebrtidge.
+     */
     private onSetBrightness = (value: CharacteristicValue): void => {
         const level = (value || 0) as number;
         const state = level > 0 ? "On" : "Off";
@@ -83,6 +119,11 @@ export class Strip extends Common<Leap.Strip> implements Device {
             .catch((error) => this.log.error(error));
     };
 
+    /**
+     * Fetches the current color temperature when Homebridge asks for it.
+     *
+     * @returns A characteristic value.
+     */
     private onGetTemperature = (): CharacteristicValue => {
         const temperature = this.transformRange(this.device.status.luminance, [1800, 3000], [140, 500], true);
 
@@ -92,6 +133,11 @@ export class Strip extends Common<Leap.Strip> implements Device {
         return temperature;
     };
 
+    /**
+     * Updates the device when a change comes in from Homebridge.
+     *
+     * @param value The characteristic value from Homebrtidge.
+     */
     private onSetTemperature = (value: CharacteristicValue): void => {
         const luminance = this.transformRange(value as number, [140, 500], [1800, 3000], true);
 
@@ -107,6 +153,9 @@ export class Strip extends Common<Leap.Strip> implements Device {
             .catch((error) => this.log.error(error));
     };
 
+    /*
+     * Transforms HomeKit color temprature to kelvin used by Lutron.
+     */
     private transformRange(value: number, source: number[], destination: number[], negate: boolean) {
         const base = Math.min(Math.max(value, source[0]), source[1]) - source[0];
         const percentage = (base * 100) / (source[1] - source[0]);

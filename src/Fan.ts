@@ -3,10 +3,11 @@ import * as Leap from "@mkellsy/leap-client";
 import { API, CharacteristicValue, Logging, Service } from "homebridge";
 
 import { Common } from "./Common";
-import { Device } from "../Interfaces/Device";
+import { Device } from "./Device";
 
 /**
  * Creates a fan device.
+ * @private
  */
 export class Fan extends Common<Leap.Fan> implements Device {
     private service: Service;
@@ -66,6 +67,8 @@ export class Fan extends Common<Leap.Fan> implements Device {
 
     /**
      * Updates the device when a change comes in from Homebridge.
+     *
+     * @param value The characteristic value from Homebrtidge.
      */
     private onSetState = (value: CharacteristicValue): void => {
         const state = value ? "On" : "Off";
@@ -93,7 +96,9 @@ export class Fan extends Common<Leap.Fan> implements Device {
     };
 
     /**
-     * Updates the device speed when a change comes in from Homebridge.
+     * Updates the device when a change comes in from Homebridge.
+     *
+     * @param value The characteristic value from Homebrtidge.
      */
     private onSetSpeed = (value: CharacteristicValue): void => {
         const speed = Math.round((((value as number) || 0) / 100) * 7);

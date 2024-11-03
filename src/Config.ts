@@ -1,3 +1,7 @@
+/**
+ * Defines the default plugin configuration.
+ * @private
+ */
 export const defaults = {
     cco: false,
     dimmers: false,

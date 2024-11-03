@@ -4,11 +4,22 @@ import { API, Logging, Service } from "homebridge";
 import { Action, Button } from "@mkellsy/hap-device";
 
 import { Common } from "./Common";
-import { Device } from "../Interfaces/Device";
+import { Device } from "./Device";
 
+/**
+ * Creates a keypad device.
+ * @private
+ */
 export class Keypad extends Common<Leap.Keypad> implements Device {
     private services: Map<string, Service> = new Map();
 
+    /**
+     * Creates a keypad device.
+     *
+     * @param homebridge A reference to the Homebridge API.
+     * @param device A reference to the discovered device.
+     * @param log A refrence to the Homebridge logger.
+     */
     constructor(homebridge: API, device: Leap.Keypad, log: Logging) {
         super(homebridge, device, log);
 
@@ -43,6 +54,12 @@ export class Keypad extends Common<Leap.Keypad> implements Device {
         }
     }
 
+    /**
+     * Invokes an action when a button is pressed.
+     *
+     * @param button The current button where the action was invoked.
+     * @param action The action invoked (press, release, ...).
+     */
     public onAction(button: Button, action: Action): void {
         const service = this.services.get(button.id);
         const characteristic = service?.getCharacteristic(this.homebridge.hap.Characteristic.ProgrammableSwitchEvent);
