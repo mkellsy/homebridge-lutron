@@ -21,7 +21,7 @@ export class Shade extends Common<Leap.Shade> implements Device {
      */
     constructor(homebridge: API, device: Leap.Shade, log: Logging) {
         super(homebridge, device, log);
-        console.log("1");
+
         this.service =
             this.accessory.getService(this.homebridge.hap.Service.WindowCovering) ||
             this.accessory.addService(this.homebridge.hap.Service.WindowCovering, this.device.name);
