@@ -1,0 +1,65 @@
+{
+    "pluginAlias": "Cliffside",
+    "pluginType": "platform",
+    "schema": {
+        "type": "object",
+        "properties": {
+            "name": {
+                "type": "string",
+                "title": "Plugin Name",
+                "default": "Lutron",
+                "required": true
+            },
+            "cco": {
+                "type": "boolean",
+                "title": "Expose Contact Closures",
+                "default": false
+            },
+            "dimmers": {
+                "type": "boolean",
+                "title": "Expose Dimmers",
+                "default": false
+            },
+            "fans": {
+                "type": "boolean",
+                "title": "Expose Fans",
+                "default": false
+            },
+            "keypads": {
+                "type": "boolean",
+                "title": "Expose Keypads",
+                "default": true
+            },
+            "sensors": {
+                "type": "boolean",
+                "title": "Expose Sensors",
+                "default": true
+            },
+            "remotes": {
+                "type": "boolean",
+                "title": "Expose Remotes",
+                "default": true
+            },
+            "shades": {
+                "type": "boolean",
+                "title": "Expose Shades",
+                "default": false
+            },
+            "strips": {
+                "type": "boolean",
+                "title": "Expose Light Strips",
+                "default": true
+            },
+            "switches": {
+                "type": "boolean",
+                "title": "Expose Switches",
+                "default": false
+            },
+            "timeclocks": {
+                "type": "boolean",
+                "title": "Expose Timeclocks",
+                "default": true
+            }
+        }
+    }
+}
