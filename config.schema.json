@@ -1,6 +1,7 @@
 {
-    "pluginAlias": "Cliffside",
+    "pluginAlias": "Lutron",
     "pluginType": "platform",
+    "singular": true,
     "schema": {
         "type": "object",
         "properties": {
