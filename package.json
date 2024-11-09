@@ -41,6 +41,7 @@
     "files": [
         "/lib",
         "/bin",
+        "/ui",
         "authority",
         "config.schema.json"
     ],
