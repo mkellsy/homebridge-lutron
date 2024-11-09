@@ -2,6 +2,8 @@
     "pluginAlias": "Lutron",
     "pluginType": "platform",
     "singular": true,
+    "customUi": true,
+    "customUiPath": "./ui",
     "schema": {
         "type": "object",
         "properties": {

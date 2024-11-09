@@ -1,0 +1,80 @@
+<div id="hb-lutron">
+    <div id="hb-lutron-form" class="card card-body">
+        <div class="schema-form-text">
+            <label class="control-label" for="name">Plugin Name</label>
+            <input class="form-control" id="name" name="name" type="text" required="true" />
+        </div>
+    </div>
+
+    <br />
+
+    <div id="hb-lutron-actions" class="card card-body">
+        <div>
+            <button id="pair-processor" type="submit" class="btn btn-primary">Pair Processor</button>
+            <button id="unpair-processors" type="submit" class="btn">Unpair Processors</button>
+        </div>
+        <div id="pair-response" class="control-label"></div>
+    </div>
+
+    <br />
+
+    <div id="hb-lutron-options" class="card card-body" style="display: none">
+        <div class="schema-form-checkbox">
+            <label class="hb-uix-switch" for="keypads">
+                <input type="checkbox" class="checkbox" id="keypads" name="keypads" />
+                <span>Expose Pico Remotes & Sunnata Keypads</span>
+                <span class="hb-uix-slider hb-uix-round"></span>
+            </label>
+        </div>
+
+        <div class="schema-form-checkbox">
+            <label class="hb-uix-switch" for="controls">
+                <input type="checkbox" class="checkbox" id="controls" name="controls" />
+                <span>Expose Dimmers & Switches</span>
+                <span class="hb-uix-slider hb-uix-round"></span>
+            </label>
+        </div>
+
+        <div class="schema-form-checkbox">
+            <label class="hb-uix-switch" for="fans">
+                <input type="checkbox" class="checkbox" id="fans" name="fans" />
+                <span>Expose Fans</span>
+                <span class="hb-uix-slider hb-uix-round"></span>
+            </label>
+        </div>
+
+        <div class="schema-form-checkbox">
+            <label class="hb-uix-switch" for="strips">
+                <input type="checkbox" class="checkbox" id="strips" name="strips" />
+                <span>Expose Light Strips</span>
+                <span class="hb-uix-slider hb-uix-round"></span>
+            </label>
+        </div>
+
+        <div class="schema-form-checkbox">
+            <label class="hb-uix-switch" for="shades">
+                <input type="checkbox" class="checkbox" id="shades" name="shades" />
+                <span>Expose Window Coverings</span>
+                <span class="hb-uix-slider hb-uix-round"></span>
+            </label>
+        </div>
+
+        <div class="schema-form-checkbox">
+            <label class="hb-uix-switch" for="sensors">
+                <input type="checkbox" class="checkbox" id="sensors" name="sensors" />
+                <span>Expose Sensors</span>
+                <span class="hb-uix-slider hb-uix-round"></span>
+            </label>
+        </div>
+
+        <div class="schema-form-checkbox">
+            <label class="hb-uix-switch" for="timeclocks">
+                <input type="checkbox" class="checkbox" id="timeclocks" name="timeclocks" />
+                <span>Expose Timeclocks</span>
+                <span class="hb-uix-slider hb-uix-round"></span>
+            </label>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="plugin.js"></script>
