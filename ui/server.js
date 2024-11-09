@@ -41,7 +41,7 @@ class UiServer extends HomebridgePluginUiServer {
             return {
                 status: "fail",
                 error: error.message,
-            }
+            };
         }
     };
 
