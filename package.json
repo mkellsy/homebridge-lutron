@@ -1,5 +1,5 @@
 {
-    "version": "1.7.11",
+    "version": "1.7.12",
     "name": "@mkellsy/homebridge-lutron",
     "displayName": "Homebridge Lutron",
     "description": "This is a plugin that exposes Lutron LEAP devices to Homebridge.",
@@ -59,7 +59,7 @@
     },
     "dependencies": {
         "@homebridge/plugin-ui-utils": "^1.0.3",
-        "@mkellsy/leap-client": "^1.7.2",
+        "@mkellsy/leap-client": "^1.7.3",
         "bson": "^6.9.0"
     },
     "peerDependencies": {
