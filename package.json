@@ -63,7 +63,7 @@
         "bson": "^6.9.0"
     },
     "peerDependencies": {
-        "homebridge": "^1.8.5"
+        "homebridge": ">=1.8.0"
     },
     "devDependencies": {
         "@eslint/js": "^9.2.0",
