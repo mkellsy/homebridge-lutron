@@ -1,10 +1,10 @@
-const os = require("os");
-const fs = require("fs");
-const path = require("path");
-const bson = require("bson");
+import os from "os";
+import fs from "fs";
+import path from "path";
+import bson from "bson";
 
-const { HomebridgePluginUiServer } = require("@homebridge/plugin-ui-utils");
-const { pair } = require("@mkellsy/leap-client");
+import { HomebridgePluginUiServer } from "@homebridge/plugin-ui-utils";
+import { pair } from "@mkellsy/leap-client";
 
 class UiServer extends HomebridgePluginUiServer {
     constructor() {
@@ -17,7 +17,7 @@ class UiServer extends HomebridgePluginUiServer {
         this.ready();
     }
 
-    onProcessors = () => {
+    public onProcessors = (): string[] => {
         const pairing = path.resolve(os.homedir(), ".leap/pairing");
 
         if (fs.existsSync(pairing)) {
@@ -30,22 +30,19 @@ class UiServer extends HomebridgePluginUiServer {
         return [];
     };
 
-    onPair = async () => {
-        try {
-            await pair();
-
-            return {
-                status: "success",
-            };
-        } catch (error) {
-            return {
-                status: "fail",
-                error: error.message,
-            };
-        }
+    public onPair = (): Promise<{ status: "success" | "fail"; error?: string }> => {
+        return new Promise<{ status: "success" | "fail"; error?: string }>((resolve) => {
+            pair()
+                .then(() => {
+                    resolve({ status: "success" });
+                })
+                .catch((error) => {
+                    resolve({ status: "fail", error: error.message });
+                });
+        });
     };
 
-    onUnpair = () => {
+    public onUnpair = (): string => {
         const pairing = path.resolve(os.homedir(), ".leap/pairing");
 
         if (fs.existsSync(pairing)) {
@@ -61,9 +58,11 @@ class UiServer extends HomebridgePluginUiServer {
             });
 
             fs.rmSync(pairing);
+
+            return "true";
         }
 
-        return;
+        return "false";
     };
 }
 

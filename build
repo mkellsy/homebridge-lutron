@@ -4,7 +4,6 @@ const colors = require("colors");
 const fs = require("fs");
 const logger = require("js-logger");
 const path = require("path");
-const proc = require("child_process");
 
 const { build } = require("esbuild");
 
@@ -18,7 +17,7 @@ const options = {
     sourcemap: true,
     target: "es6",
     platform: "node",
-    external: ["homebridge"],
+    external: ["homebridge", "bson"],
     logLevel: "error",
     legalComments: "none",
 };
@@ -33,6 +32,7 @@ fs.copyFileSync(
 const tasks = [
     { input: path.resolve(__dirname, "src/index.ts"), output: path.resolve(__dirname, "lib/index.js") },
     { input: path.resolve(__dirname, "src/CLI.ts"), output: path.resolve(__dirname, "lib/cli.js") },
+    { input: path.resolve(__dirname, "src/Server.ts"), output: path.resolve(__dirname, "ui/server.js") },
 ];
 
 const jobs = [];
