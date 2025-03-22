@@ -33,6 +33,9 @@ Timeclocks are a feature of RA3. They are programmed via the Lutron Designer. Th
 
 Sunnata keypads are a feature of RA3. They behave similar to Pico remotes, but since they do not emit a release event, HomeKit double presses and long presses are not supported. They do show up in HomeKit, but assigning actions to these will not work. Only single presses are supported.
 
+## Storage
+This plugin has its own storage folder. Each file is explained in the **[Storage](https://github.com/mkellsy/homebridge-lutron/blob/main/docs/storage.md)** documentation.
+
 ## Support
 
 I offer no support for this plugin, it is published only for personal use.
