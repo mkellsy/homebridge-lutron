@@ -5,7 +5,7 @@ This documents what files get wrote to your device and what each file does.
 This plugin stores files to a `.leap` folder in the same directory as `.homebridge`. Why? This is because Lutron processors are paired per device not Homebridge instance.
 
 ## Files
-Each file stores different information related to your Lutron syste,
+Each file stores different information related to your Lutron system,
 
 ### Discovery
 The `discovery` file stores information about Lutron devices found on your network. This is used to speed up startup and can attempt to connect to previously discovered devices, while mDNS is waiting for a broadcast.
