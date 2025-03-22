@@ -21,6 +21,6 @@ There will be a file for each processor you have paired. The file name is the pr
 The flat cache is very useful for systems that have hundreds of devices.
 
 ## Homebridge Configuration
-There also is a configuration section for this plugin in the Homebridge's `config.json` file in the `.homebridge` folder. This contains information related to the Homebridge instance.
+There also is a configuration section for this plugin in the Homebridge `config.json` file. This contains information related to the Homebridge instance.
 
-This contains which devices are exposed and the nesessary properties for Homebridge.
+This contains which device typess are exposed and the nesessary properties for Homebridge.
