@@ -21,6 +21,7 @@ This pulgin supports most of the devices available in Caseda and RA3. By default
 -   Switch Modules (Including Vive)
 -   0-10v Dimmer Modules (Including Vive)
 -   Triathlon, Sivoia & Serena Window Coverings
+-   Lumaris LED Light Strips (Tunable White Tape Only)
 -   Occupancy Sensors
 -   Motion Sensors
 -   Timeclocks
