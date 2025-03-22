@@ -23,4 +23,4 @@ The flat cache is very useful for systems that have hundreds of devices.
 ## Homebridge Configuration
 There also is a configuration section for this plugin in the Homebridge `config.json` file. This contains information related to the Homebridge instance.
 
-This contains which device typess are exposed and the nesessary properties for Homebridge.
+This contains which device types are exposed and the nesessary properties for Homebridge.
