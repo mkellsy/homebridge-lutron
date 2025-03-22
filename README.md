@@ -10,7 +10,7 @@ This plugin supports both the Homebridge UI and CLI. You can install and configu
 
 ## Devices
 
-This pulgin supports most of the devices available in Caseda and RA3. By default, only devices that are not nativally supported are exposed to Homebridge. These devices this plugin supports.
+This pulgin supports most of the devices available in Caseda and RA3. By default, only devices that are not nativally supported are exposed to Homebridge. These are the devices this plugin supports.
 
 -   Pico Remotes (All types are aupported, including 4 button scene remotes)
 -   Sunnata Keypads (All types, including both hybrid & non-hybrid)
