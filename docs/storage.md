@@ -13,7 +13,7 @@ The `discovery` file stores information about Lutron devices found on your netwo
 If any network information changes on the device, this will be re-discovered and updated via mDNS.
 
 ### Pairing
-The `pairing` file stores the certificates for paired processors. This information is sensitive and is encrypted at rest. This information should not be stored in the clear test config file that Homebrtidge uses.
+The `pairing` file stores the certificates for paired processors. This sensitive information is encrypted at rest, and sould not be stored in the clear text config file that Homebrtidge uses.
 
 ### Cache
 There will be a file for each processor you have paired. The file name is the processor ID. This is a flat cache file used to optimize the discovery process. This allows the processor to come online without needing to de-discover each device.
