@@ -1,5 +1,5 @@
 {
-    "version": "1.7.15",
+    "version": "1.7.16",
     "name": "@mkellsy/homebridge-lutron",
     "displayName": "Homebridge Lutron",
     "description": "This is a plugin that exposes Lutron LEAP devices to Homebridge.",
@@ -47,6 +47,10 @@
     ],
     "bin": {
         "lutron": "bin/lutron"
+    },
+    "engines": {
+        "node": ">=18.0.0",
+        "homebridge": ">=1.6.0 || >=2.0.0"
     },
     "scripts": {
         "build": "npm run format && npm run lint && npm run test && node ./build",
