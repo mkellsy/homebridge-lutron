@@ -1,7 +1,7 @@
+import * as HAP from "@mkellsy/hap-device";
 import * as Leap from "@mkellsy/leap-client";
 
 import { API, DynamicPlatformPlugin, Logging, PlatformAccessory, PlatformConfig } from "homebridge";
-import { Action, Button, Device as IDevice, DeviceState } from "@mkellsy/hap-device";
 
 import { Accessories } from "./Accessories";
 import { Device } from "./Device";
@@ -60,7 +60,7 @@ export class Platform implements DynamicPlatformPlugin {
      * register with Homebridge or re-initialize the accessory if it is from
      * the cache.
      */
-    private onAvailable = (devices: IDevice[]): void => {
+    private onAvailable = (devices: HAP.Device[]): void => {
         for (const device of devices) {
             const accessory = Accessories.create(this.homebridge, device, this.config, this.log);
 
@@ -78,7 +78,7 @@ export class Platform implements DynamicPlatformPlugin {
      * Button press listener. This recieves actions from remotes and relays to
      * Homebridge.
      */
-    private onAction = (device: IDevice, button: Button, action: Action): void => {
+    private onAction = (device: HAP.Device, button: HAP.Button, action: HAP.Action): void => {
         const accessory = Accessories.get(this.homebridge, device);
 
         if (accessory == null || accessory.onAction == null) {
@@ -92,7 +92,7 @@ export class Platform implements DynamicPlatformPlugin {
      * Device update listener. This recieves updates from the devices and will
      * relay the state to Homebridge.
      */
-    private onUpdate = (device: IDevice, state: DeviceState): void => {
+    private onUpdate = (device: HAP.Device, state: HAP.DeviceState): void => {
         const accessory = Accessories.get(this.homebridge, device);
 
         if (accessory == null || accessory.onUpdate == null) {

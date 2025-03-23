@@ -79,6 +79,7 @@ describe("Shade", () => {
         };
 
         accessoryStub = {
+            addCharacteristic: sinon.stub(),
             setCharacteristic: sinon.stub(),
             getCharacteristic: sinon.stub(),
             updateCharacteristic: sinon.stub(),

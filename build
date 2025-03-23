@@ -14,7 +14,7 @@ logger.setDefaults({ useDefaults: true });
 const options = {
     bundle: true,
     minify: true,
-    sourcemap: true,
+    sourcemap: (process.argv[2] || "").toLowerCase() !== "release",
     target: "es6",
     platform: "node",
     external: ["homebridge", "bson"],
@@ -38,6 +38,8 @@ const tasks = [
 const jobs = [];
 
 fs.rmSync(path.resolve(__dirname, "lib"), { recursive: true, force: true });
+fs.rmSync(path.resolve(__dirname, "ui/server.js"), { force: true });
+fs.rmSync(path.resolve(__dirname, "ui/server.js.map"), { force: true });
 
 for (let i = 0; i < tasks.length; i++) {
     const task = tasks[i];

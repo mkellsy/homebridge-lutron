@@ -26,7 +26,11 @@ export class Shade extends Common<Leap.Shade> implements Device {
             this.accessory.getService(this.homebridge.hap.Service.WindowCovering) ||
             this.accessory.addService(this.homebridge.hap.Service.WindowCovering, this.device.name);
 
+        this.service.addCharacteristic(this.homebridge.hap.Characteristic.ConfiguredName);
+
         this.service.setCharacteristic(this.homebridge.hap.Characteristic.Name, this.device.name);
+        this.service.setCharacteristic(this.homebridge.hap.Characteristic.ConfiguredName, this.device.name);
+
         this.service.getCharacteristic(this.homebridge.hap.Characteristic.CurrentPosition).onGet(this.onGetPosition);
         this.service.getCharacteristic(this.homebridge.hap.Characteristic.PositionState).onGet(this.onGetState);
 

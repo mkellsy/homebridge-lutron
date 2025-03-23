@@ -26,7 +26,11 @@ export class Occupancy extends Common<Leap.Occupancy> implements Device {
             this.accessory.getService(this.homebridge.hap.Service.OccupancySensor) ||
             this.accessory.addService(this.homebridge.hap.Service.OccupancySensor, this.device.name);
 
+        this.service.addCharacteristic(this.homebridge.hap.Characteristic.ConfiguredName);
+
         this.service.setCharacteristic(this.homebridge.hap.Characteristic.Name, this.device.name);
+        this.service.setCharacteristic(this.homebridge.hap.Characteristic.ConfiguredName, this.device.name);
+
         this.service.getCharacteristic(this.homebridge.hap.Characteristic.OccupancyDetected).onGet(this.onGetState);
     }
 

@@ -68,6 +68,7 @@ describe("Accessories", () => {
         characteristicStub.onSet.returns(characteristicStub);
 
         accessoryStub = {
+            addCharacteristic: sinon.stub(),
             setCharacteristic: sinon.stub(),
             getCharacteristic: sinon.stub().returns(characteristicStub),
             updateCharacteristic: sinon.stub(),

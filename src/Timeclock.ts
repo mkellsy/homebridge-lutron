@@ -28,7 +28,11 @@ export class Timeclock extends Common<Leap.Timeclock> implements Device {
             this.accessory.getService(this.homebridge.hap.Service.Switch) ||
             this.accessory.addService(this.homebridge.hap.Service.Switch, name);
 
+        this.service.addCharacteristic(this.homebridge.hap.Characteristic.ConfiguredName);
+
         this.service.setCharacteristic(this.homebridge.hap.Characteristic.Name, name);
+        this.service.setCharacteristic(this.homebridge.hap.Characteristic.ConfiguredName, this.device.name);
+
         this.service.getCharacteristic(this.homebridge.hap.Characteristic.On).onGet(this.onGetState);
     }
 

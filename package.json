@@ -54,12 +54,13 @@
     },
     "scripts": {
         "build": "npm run format && npm run lint && npm run test && node ./build",
+        "release": "node ./build release",
         "lint": "eslint ./src/*.ts",
         "format": "prettier --write .",
         "test": "nyc mocha test/*.test.ts test/**/*.test.ts",
         "watch": "npm run build && npm link && nodemon",
         "pair": "npm run build && node ./bin/lutron -d pair",
-        "prepublishOnly": "npm run build"
+        "prepublishOnly": "npm run release"
     },
     "dependencies": {
         "bson": "^6.9.0"
