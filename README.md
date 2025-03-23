@@ -5,6 +5,7 @@ This is a plugin that exposes Lutron Caseta and Radio RA3 devices to Homebridge.
 ## Getting Started
 
 This plugin supports both the Homebridge UI and CLI. You can install and configure depending on your needs.
+
 -   **[Getting Started](https://github.com/mkellsy/homebridge-lutron/blob/main/docs/ui.md)**
 -   **[Getting Started (Manual)](https://github.com/mkellsy/homebridge-lutron/blob/main/docs/cli.md)**
 
@@ -32,9 +33,10 @@ Timeclocks are a feature of RA3. They are programmed via the Lutron Designer. Th
 
 ## Keypads
 
-Sunnata keypads are a feature of RA3. They behave similar to Pico remotes, but since they do not emit a release event, HomeKit double presses and long presses are not supported. They do show up in HomeKit, but assigning actions to these will not work. Only single presses are supported.
+Sunnata keypads are a feature of RA3. They behave similar to Pico remotes, but since they do not emit a release event, HomeKit double presses and long presses are not supported.
 
 ## Storage
+
 This plugin has its own storage folder. Each file is explained in the **[storage](https://github.com/mkellsy/homebridge-lutron/blob/main/docs/storage.md)** documentation.
 
 ## Support

@@ -1,7 +1,9 @@
 # Getting Started (Manual)
+
 This documents the installation and configuration process using the command line.
 
 ## Install
+
 You can install this plugin from the command line using NPM.
 
 ```bash
@@ -11,6 +13,7 @@ sudo npm install -g --unsafe-perms @mkellsy/homebridge-lutron
 Why `--unsafe-perms`? This plugin contains a script that needs to be linked in the `/usr/local/bin` folder. This flag allows this linking. Without the `--unsafe-perms` flag, you will need to run the `lutron` command from the plugin directory.
 
 ## Pairing
+
 After you install the plugin, you will need to pair your processors or bridges. You can start the pairing process by running this command.
 
 ```bash
@@ -26,6 +29,7 @@ If you have multiple systems Caseta and RA3, you can pair other processors or br
 After you have a processor or bridge paired, you can start Homebridge.
 
 ## Configuration
+
 This plugin doesn't require any configuration other than the platform to work. The default is to expose remotes, keypads and sensors.
 
 ```json

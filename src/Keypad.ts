@@ -1,7 +1,7 @@
 import * as Leap from "@mkellsy/leap-client";
 
 import { API, Logging, Service } from "homebridge";
-import { Action, Button } from "@mkellsy/hap-device";
+import { Action, Button, DeviceType } from "@mkellsy/hap-device";
 
 import { Common } from "./Common";
 import { Device } from "./Device";
@@ -46,9 +46,12 @@ export class Keypad extends Common<Leap.Keypad> implements Device {
             service.setCharacteristic(this.homebridge.hap.Characteristic.Name, button.name);
             service.setCharacteristic(this.homebridge.hap.Characteristic.ServiceLabelIndex, button.index);
 
-            service
-                .getCharacteristic(this.homebridge.hap.Characteristic.ProgrammableSwitchEvent)
-                .setProps({ maxValue: 2 });
+            service.getCharacteristic(this.homebridge.hap.Characteristic.ProgrammableSwitchEvent).setProps({
+                maxValue:
+                    device.type === DeviceType.Keypad
+                        ? this.homebridge.hap.Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS
+                        : this.homebridge.hap.Characteristic.ProgrammableSwitchEvent.LONG_PRESS,
+            });
 
             this.services.set(button.id, service);
         }
