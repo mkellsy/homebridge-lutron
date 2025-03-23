@@ -101,6 +101,7 @@ describe("Platform", () => {
         };
 
         accessoryStub = {
+            addCharacteristic: sinon.stub(),
             setCharacteristic: sinon.stub().returns(accessoryStub),
             getCharacteristic: sinon.stub().returns(characteristicStub),
             updateCharacteristic: sinon.stub(),
