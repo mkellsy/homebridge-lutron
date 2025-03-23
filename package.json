@@ -1,5 +1,5 @@
 {
-    "version": "1.7.18",
+    "version": "1.7.19",
     "name": "@mkellsy/homebridge-lutron",
     "displayName": "Homebridge Lutron",
     "description": "This is a plugin that exposes Lutron LEAP devices to Homebridge.",
@@ -65,9 +65,6 @@
     "dependencies": {
         "bson": "^6.9.0"
     },
-    "peerDependencies": {
-        "homebridge": ">=1.8.0"
-    },
     "devDependencies": {
         "@eslint/js": "^9.2.0",
         "@homebridge/plugin-ui-utils": "^1.0.3",
@@ -90,6 +87,7 @@
         "esbuild": "^0.20.2",
         "eslint": "^8.57.0",
         "eslint-plugin-jsdoc": "^48.2.3",
+        "homebridge": "^1.9.0",
         "js-logger": "^1.6.1",
         "mocha": "^10.2.0",
         "nodemon": "^3.1.0",
